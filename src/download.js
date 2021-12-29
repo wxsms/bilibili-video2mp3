@@ -56,7 +56,7 @@ function download (url, filename) {
   }));
 }
 
-export async function downloadToDisk (url) {
+export async function download2disk (url) {
   const initialState = await getDataByUrl(url);
   // console.log(initialState);
   const aid = initialState.videoData.aid;
@@ -79,4 +79,5 @@ export async function downloadToDisk (url) {
   const videoDownloadUrl = playResult.durl[0].url;
   // console.log(videoDownloadUrl);
   await download(videoDownloadUrl, filename);
+  return filename;
 }
