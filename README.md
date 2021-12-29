@@ -1,6 +1,6 @@
 # bilibili-video2mp3
 
-A tool to download all videos and convert to mp3 inside a video set of bilibili.
+A tool to download all videos and convert to mp3 inside a video set of bilibili (also works for single video, of course).
 
 You will need node.js installed and ffmpeg in system path first.
 
