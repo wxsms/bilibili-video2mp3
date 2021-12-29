@@ -1,15 +1,11 @@
 {
   "name": "bilibili-video2mp3",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "bin": "index.js",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
-  },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "minimist": "^1.2.5",
     "node-fetch": "^3.1.0"

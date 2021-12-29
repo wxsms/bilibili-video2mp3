@@ -14,7 +14,7 @@ function download (url, filename) {
     } catch (err) {
       // ignore
     }
-    console.log(`${filename}: ${0}%.`);
+    console.log(`${filename}: ${0}%`);
 
     const writeStream = fs.createWriteStream(filename);
     const request = (url.startsWith('https') ? https : http)
@@ -38,13 +38,13 @@ function download (url, filename) {
           const progressMark = Math.floor(progress / 10);
           if (progressMark > latestProgress) {
             latestProgress = progressMark;
-            console.log(`${filename}: ${progress.toFixed(2)}%.`);
+            console.log(`${filename}: ${progress.toFixed(2)}%`);
           }
         });
 
         response.on('end', () => {
           writeStream.close();
-          console.log(`${filename}: download finished.`);
+          console.log(`${filename}: download finished`);
           resolve();
         });
 

@@ -7,7 +7,7 @@ export async function flv2mp3 (filename) {
       if (err) {
         reject(err);
       } else {
-        console.log(`${mp3} converted.`);
+        console.log(`${mp3} converted`);
         resolve();
       }
     });
