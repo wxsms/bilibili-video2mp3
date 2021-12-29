@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import crypto from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
 import argv from './argv.js';
+import { createProgressBar } from './progress.js';
 
 function download (url, filename) {
   // console.log('download', url)
@@ -15,7 +16,6 @@ function download (url, filename) {
     } catch (err) {
       // ignore
     }
-    console.log(`${filename}: ${0}%`);
 
     const writeStream = fs.createWriteStream(filename);
     const request = (url.startsWith('https') ? https : http)
@@ -28,24 +28,16 @@ function download (url, filename) {
         }
       }, function (response) {
         response.pipe(writeStream);
-
-        const len = parseInt(response.headers['content-length'], 10);
-        let cur = 0;
-        let latestProgress = 0;
-
+        const bar = createProgressBar(
+          parseInt(response.headers['content-length'], 10),
+          filename
+        );
         response.on('data', function (chunk) {
-          cur += chunk.length;
-          const progress = 100.0 * cur / len; // 0-100
-          const progressMark = Math.floor(progress / 10);
-          if (progressMark > latestProgress) {
-            latestProgress = progressMark;
-            console.log(`${filename}: ${progress.toFixed(2)}%`);
-          }
+          bar.tick(chunk.length);
         });
 
         response.on('end', () => {
           writeStream.close();
-          console.log(`${filename}: download finished`);
           resolve();
         });
 
@@ -66,7 +58,7 @@ export async function download2disk (url) {
   const title = initialState.videoData.pages[pid - 1].part;
   const date = new Date(initialState.videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  const author = argv.author || 'yousa'
+  const author = argv.author || 'yousa';
   const filename = `${title}-${author}-${dateString}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);

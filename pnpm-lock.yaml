@@ -2,13 +2,30 @@ lockfileVersion: 5.3
 
 specifiers:
   minimist: ^1.2.5
+  multi-progress: ^4.0.0
   node-fetch: ^3.1.0
+  progress: ^2.0.3
 
 dependencies:
   minimist: mirrors.tencent.com/minimist/1.2.5
+  multi-progress: 4.0.0_progress@2.0.3
   node-fetch: mirrors.tencent.com/node-fetch/3.1.0
+  progress: 2.0.3
 
 packages:
+
+  /multi-progress/4.0.0_progress@2.0.3:
+    resolution: {integrity: sha512-9zcjyOou3FFCKPXsmkbC3ethv51SFPoA4dJD6TscIp2pUmy26kBDZW6h9XofPELrzseSkuD7r0V+emGEeo39Pg==}
+    peerDependencies:
+      progress: ^2.0.0
+    dependencies:
+      progress: 2.0.3
+    dev: false
+
+  /progress/2.0.3:
+    resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
+    engines: {node: '>=0.4.0'}
+    dev: false
 
   mirrors.tencent.com/data-uri-to-buffer/4.0.0:
     resolution: {integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: http://mirrors.tencent.com/npm/data-uri-to-buffer/-/data-uri-to-buffer-4.0.0.tgz}
