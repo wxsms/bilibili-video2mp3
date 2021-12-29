@@ -4,6 +4,7 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
+import argv from './argv.js';
 
 function download (url, filename) {
   // console.log('download', url)
@@ -65,7 +66,8 @@ export async function download2disk (url) {
   const title = initialState.videoData.pages[pid - 1].part;
   const date = new Date(initialState.videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  const filename = `${title}-yousa-${dateString}.flv`;
+  const author = argv.author || 'yousa'
+  const filename = `${title}-${author}-${dateString}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);
   // console.log('cid:', cid);
