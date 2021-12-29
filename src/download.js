@@ -3,6 +3,7 @@ import http from 'http';
 import fs from 'fs';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
+import { getDataByUrl } from './getDataByUrl.js';
 
 function download (url, filename) {
   // console.log('download', url)
@@ -13,6 +14,8 @@ function download (url, filename) {
     } catch (err) {
       // ignore
     }
+    console.log(`${filename}: ${0}%.`);
+
     const writeStream = fs.createWriteStream(filename);
     const request = (url.startsWith('https') ? https : http)
       .get(url, {
@@ -27,17 +30,21 @@ function download (url, filename) {
 
         const len = parseInt(response.headers['content-length'], 10);
         let cur = 0;
-        const total = len / 1048576; //1048576 - bytes in  1Megabyte
+        let latestProgress = 0;
 
         response.on('data', function (chunk) {
           cur += chunk.length;
-          process.stdout.clearLine(0);
-          process.stdout.cursorTo(0);
-          process.stdout.write(`Downloading ${(100.0 * cur / len).toFixed(2)}%. ${filename}: ${total.toFixed(2)} mb.`);
+          const progress = 100.0 * cur / len; // 0-100
+          const progressMark = Math.floor(progress / 10);
+          if (progressMark > latestProgress) {
+            latestProgress = progressMark;
+            console.log(`${filename}: ${progress.toFixed(2)}%.`);
+          }
         });
 
         response.on('end', () => {
           writeStream.close();
+          console.log(`${filename}: download finished.`);
           resolve();
         });
 
@@ -50,10 +57,7 @@ function download (url, filename) {
 }
 
 export async function downloadToDisk (url) {
-  const htmlPage = await (await fetch(url)).text();
-  // console.log(htmlPage);
-  const initialStateStr = htmlPage.match(/__INITIAL_STATE__=(.*?);/)[1];
-  const initialState = JSON.parse(initialStateStr);
+  const initialState = await getDataByUrl(url);
   // console.log(initialState);
   const aid = initialState.videoData.aid;
   const pid = initialState.p;
