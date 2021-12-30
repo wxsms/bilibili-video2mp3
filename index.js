@@ -65,7 +65,7 @@ process.on('uncaughtException', err => {
       return !((typeof from === 'number' && index < from) || (typeof to === 'number' && index > to));
     });
 
-  const pageChunks = chunk(pages, 10);
+  const pageChunks = chunk(pages, argv.threads || 5);
   for (const c of pageChunks) {
     await Promise.all(c.map(download2mp3));
   }

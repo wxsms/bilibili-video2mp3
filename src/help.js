@@ -7,6 +7,8 @@ export const help = `
     optional, limit to page download from, 1-based.
 --to
     optional, limit to page download to, 1-based.
+--threads
+    optional, how many download threads. default to 5.
 --author
     optional. file downloaded as title-author-date.mp3, default to up's name.
 --skip-mp3
