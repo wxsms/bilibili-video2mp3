@@ -10,6 +10,14 @@ import { chunk } from 'lodash-es';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+process.on('uncaughtException', err => {
+  for (let i = 1; i <= 100; ++i) {
+    console.log();
+  }
+  console.error(err);
+  process.exit(1); //mandatory (as per the Node.js docs)
+});
+
 (async function () {
   if (argv.help) {
     console.log(help);
