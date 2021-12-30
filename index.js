@@ -34,22 +34,39 @@ process.on('uncaughtException', err => {
   }
 
   let urls = argv.url;
+  const from = argv.from;
+  const to = argv.to;
+  let pages = [];
+
   if (typeof urls === 'string') {
     urls = [urls];
   }
 
   for (let url of urls) {
     url = url.trim();
-    // console.log(url);
+    console.log(`fetching pages for ${url}`);
     const data = await getDataByUrl(url);
     // console.log(data);
     // console.log(`total threads: ${data.videoData.pages.length}`);
-    const pages = data.videoData.pages.map((v, i) => {
-      return url.indexOf('p=') > 0 ? url.replace(/p=\d+/, `p=${i + 1}`) : `${url.replace(/\?.+/, '')}?p=${i + 1}`;
+    pages = [...pages, ...data.videoData.pages
+      .map((value, index) => {
+        const p = index + 1;
+        return url.indexOf('p=') > 0 ? url.replace(/p=\d+/, `p=${p}`) : `${url.replace(/\?.+/, '')}?p=${p}`;
+      })];
+  }
+  pages = pages
+    .map((value, index) => {
+      return {
+        url: value,
+        index: index + 1
+      };
+    })
+    .filter(({ index }) => {
+      return !((typeof from === 'number' && index < from) || (typeof to === 'number' && index > to));
     });
-    const pageChunks = chunk(pages, 10);
-    for (const c of pageChunks) {
-      await Promise.all(c.map(download2mp3));
-    }
+
+  const pageChunks = chunk(pages, 10);
+  for (const c of pageChunks) {
+    await Promise.all(c.map(download2mp3));
   }
 })();

@@ -3,6 +3,10 @@ export const help = `
     required. the video set (or single) url of bilibili.
     multiple url is ok, for example:
     npx bilibili-video2mp3 --url=a --url=b --url=c
+--from
+    optional, limit to page download from, 1-based.
+--to
+    optional, limit to page download to, 1-based.
 --author
     optional. file downloaded as title-author-date.mp3, default to up's name.
 --skip-mp3

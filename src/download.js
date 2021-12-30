@@ -7,7 +7,7 @@ import { getDataByUrl } from './getDataByUrl.js';
 import argv from './argv.js';
 import { createProgressBar } from './progress.js';
 
-function download (url, filename) {
+function download (url, filename, index) {
   // console.log('download', url)
   return new Promise(((resolve, reject) => {
     try {
@@ -46,7 +46,7 @@ function download (url, filename) {
         // timeout: 20
       }, function (response) {
         response.pipe(writeStream);
-        const bar = createProgressBar(parseInt(response.headers['content-length'], 10), filename);
+        const bar = createProgressBar(index, filename, parseInt(response.headers['content-length'], 10));
         response.on('data', function (chunk) {
           bar.tick(chunk.length);
         });
@@ -63,7 +63,7 @@ function download (url, filename) {
   }));
 }
 
-export async function download2disk (url) {
+export async function download2disk (url, index) {
   const data = await getDataByUrl(url);
   // console.log(initialState);
   const { videoData } = data;
@@ -89,6 +89,6 @@ export async function download2disk (url) {
   // console.log(playResult);
   const videoDownloadUrl = playResult.durl[0].url;
   // console.log(videoDownloadUrl);
-  await download(videoDownloadUrl, filename);
+  await download(videoDownloadUrl, filename, index);
   return filename;
 }

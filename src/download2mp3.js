@@ -3,9 +3,9 @@ import { flv2mp3 } from './flv2mp3.js';
 import fs from 'fs';
 import argv from './argv.js';
 
-export async function download2mp3 (url) {
+export async function download2mp3 ({ url, index }) {
   try {
-    const filename = await download2disk(url);
+    const filename = await download2disk(url, index);
     if (argv['skip-mp3']) {
       return;
     }
