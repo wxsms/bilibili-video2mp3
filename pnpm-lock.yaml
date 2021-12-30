@@ -1,12 +1,14 @@
 lockfileVersion: 5.3
 
 specifiers:
+  lodash-es: ^4.17.21
   minimist: ^1.2.5
   multi-progress: ^4.0.0
   node-fetch: ^3.1.0
   progress: ^2.0.3
 
 dependencies:
+  lodash-es: mirrors.tencent.com/lodash-es/4.17.21
   minimist: mirrors.tencent.com/minimist/1.2.5
   multi-progress: 4.0.0_progress@2.0.3
   node-fetch: mirrors.tencent.com/node-fetch/3.1.0
@@ -50,6 +52,12 @@ packages:
     engines: {node: '>=12.20.0'}
     dependencies:
       fetch-blob: mirrors.tencent.com/fetch-blob/3.1.3
+    dev: false
+
+  mirrors.tencent.com/lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: https://mirrors.tencent.com/npm/lodash-es/-/lodash-es-4.17.21.tgz}
+    name: lodash-es
+    version: 4.17.21
     dev: false
 
   mirrors.tencent.com/minimist/1.2.5:
