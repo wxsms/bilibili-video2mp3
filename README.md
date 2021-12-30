@@ -5,7 +5,7 @@ A tool to download all videos and convert to mp3 inside a video set of bilibili 
 You will need node.js installed and ffmpeg in system path first.
 
 ```
-npx bilibili-video2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3?p=1
+npx bilibili-video2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3
 ```
 
 output sample:
@@ -25,7 +25,8 @@ options:
 
 ```
 --url
-    required. the video set url of bilibili. the p=1 doesn't matter.
+    required. the video set (or single) url of bilibili.
+    can be multi url split by comma (,).
 --author
-    optional. file downloaded as title-author-date.mp3, default to 'yousa'.
+    optional. file downloaded as title-author-date.mp3, default to up's name.
 ```

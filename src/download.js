@@ -50,15 +50,18 @@ function download (url, filename) {
 }
 
 export async function download2disk (url) {
-  const initialState = await getDataByUrl(url);
+  const data = await getDataByUrl(url);
   // console.log(initialState);
-  const aid = initialState.videoData.aid;
-  const pid = initialState.p;
-  const cid = initialState.videoData.pages[pid - 1].cid;
-  const title = initialState.videoData.pages[pid - 1].part;
-  const date = new Date(initialState.videoData.ctime * 1000);
+  const { videoData } = data;
+  const { pages } = videoData;
+  const isSingle = pages.length === 1;
+  // const aid = videoData.aid;
+  const pid = data.p;
+  const cid = pages[pid - 1].cid;
+  const title = isSingle ? videoData.title : pages[pid - 1].part;
+  const date = new Date(videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  const author = argv.author || 'yousa';
+  const author = argv.author || videoData.owner.name;
   const filename = `${title}-${author}-${dateString}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);

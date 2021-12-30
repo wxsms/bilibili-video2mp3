@@ -5,15 +5,13 @@ import { getDataByUrl } from './src/getDataByUrl.js';
 import argv from './src/argv.js';
 
 (async function () {
-  const data = await getDataByUrl(argv.url);
-  // console.log(`total threads: ${data.videoData.pages.length}`);
-  await Promise.all(
-    data.videoData.pages.map((v, i) => {
-
-      return download2mp3(
-        argv.url.indexOf('p=') > 0 ?
-          argv.url.replace(/p=\d+/, `p=${i + 1}`) :
-          `${argv.url.replace(/\?.+/, '')}?p=${i + 1}`
-      );
+  for (let url of argv.url.split(',')) {
+    url = url.trim();
+    const data = await getDataByUrl(url);
+    // console.log(data);
+    // console.log(`total threads: ${data.videoData.pages.length}`);
+    await Promise.all(data.videoData.pages.map((v, i) => {
+      return download2mp3(url.indexOf('p=') > 0 ? url.replace(/p=\d+/, `p=${i + 1}`) : `${url.replace(/\?.+/, '')}?p=${i + 1}`);
     }));
+  }
 })();
