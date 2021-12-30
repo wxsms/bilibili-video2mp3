@@ -18,20 +18,35 @@ function download (url, filename) {
     }
 
     const writeStream = fs.createWriteStream(filename);
-    const request = (url.startsWith('https') ? https : http)
+    let retried = false;
+    let request;
+
+    function retry () {
+      if (retried) {
+        return;
+      }
+      retried = true;
+      request.abort();
+      writeStream.close();
+      try {
+        fs.unlinkSync(filename);
+      } catch (_) {}
+      setTimeout(() => {
+        download(url, filename).then(resolve);
+      }, 2000);
+    }
+
+    request = (url.startsWith('https') ? https : http)
       .get(url, {
-        url: url,
-        headers: {
+        url: url, headers: {
           'Range': `bytes=0-`,
           'User-Agent': 'PostmanRuntime/7.28.4',
           'Referer': 'https://www.bilibili.com/'
-        }
+        },
+        // timeout: 20
       }, function (response) {
         response.pipe(writeStream);
-        const bar = createProgressBar(
-          parseInt(response.headers['content-length'], 10),
-          filename
-        );
+        const bar = createProgressBar(parseInt(response.headers['content-length'], 10), filename);
         response.on('data', function (chunk) {
           bar.tick(chunk.length);
         });
@@ -41,11 +56,10 @@ function download (url, filename) {
           resolve();
         });
 
-        request.on('error', err => {
-          fs.unlinkSync(filename);
-          reject(err);
-        });
+        writeStream.on('error', retry);
       });
+    request.on('error', retry);
+    request.on('timeout', retry);
   }));
 }
 
