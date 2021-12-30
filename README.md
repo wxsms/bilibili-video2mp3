@@ -31,4 +31,5 @@ options:
     optional. file downloaded as title-author-date.mp3, default to up's name.
 --skip-mp3
     skip the mp3 transform and keep downloaded file as video.
+    ffmpeg is not required in this case.
 ```
