@@ -21,15 +21,8 @@ downloading [============                  ] 41% 57.4s 日出日落-yousa-2021-1
 downloading [==========                    ] 34% 78.3s 知否知否-yousa-2021-12-26.flv
 ```
 
-options:
+options, see [help.js](https://github.com/wxsms/bilibili-video2mp3/blob/master/src/help.js) or:
 
 ```
---url
-    required. the video set (or single) url of bilibili.
-    can be multi url split by comma (,).
---author
-    optional. file downloaded as title-author-date.mp3, default to up's name.
---skip-mp3
-    skip the mp3 transform and keep downloaded file as video.
-    ffmpeg is not required in this case.
+npx bilibili-video2mp3 --help
 ```
