@@ -13,6 +13,9 @@ export const help = `
     optional. file downloaded as TITLE-AUTHOR-DATE.mp3, default to up's name.
 --naming
     optional. change the downloaded files' naming pattern. default to TITLE-AUTHOR-DATE.
+    available: INDEX, TITLE, AUTHOR, DATE
+--index-offset
+    offset added to INDEX while saved.
 --skip-mp3
     skip the mp3 transform and keep downloaded file as video.
     ffmpeg is not required in this case.
