@@ -7,5 +7,7 @@ export function getName (title, author, date) {
   return p
     .replace('TITLE', title)
     .replace('AUTHOR', author)
-    .replace('DATE', date);
+    .replace('DATE', date)
+    // leading - cause ffmpeg command fail
+    .replace(/^-*/, '');
 }
