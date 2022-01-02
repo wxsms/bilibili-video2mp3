@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
 import argv from './argv.js';
 import { createProgressBar } from './progress.js';
+import { getName } from './naming.js';
 
 function download (url, filename, index) {
   // console.log('download', url)
@@ -76,7 +77,7 @@ export async function download2disk (url, index) {
   const date = new Date(videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   const author = argv.author || videoData.owner.name;
-  const filename = `${title}-${author}-${dateString}.flv`;
+  const filename = `${getName(title, author, dateString)}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);
   // console.log('cid:', cid);

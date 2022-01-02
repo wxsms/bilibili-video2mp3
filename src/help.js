@@ -10,7 +10,9 @@ export const help = `
 --threads
     optional, how many download threads. default to 5.
 --author
-    optional. file downloaded as title-author-date.mp3, default to up's name.
+    optional. file downloaded as TITLE-AUTHOR-DATE.mp3, default to up's name.
+--naming
+    optional. change the downloaded files' naming pattern. default to TITLE-AUTHOR-DATE.
 --skip-mp3
     skip the mp3 transform and keep downloaded file as video.
     ffmpeg is not required in this case.
