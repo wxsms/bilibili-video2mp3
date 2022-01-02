@@ -77,7 +77,7 @@ export async function download2disk (url, index) {
   const date = new Date(videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   const author = argv.author || videoData.owner.name;
-  const filename = `${getName(title, author, dateString)}.flv`;
+  const filename = `${getName(index, title, author, dateString)}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);
   // console.log('cid:', cid);
