@@ -1,6 +1,6 @@
 {
   "name": "bilibili-video2mp3",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "",
   "bin": "index.js",
   "type": "module",
