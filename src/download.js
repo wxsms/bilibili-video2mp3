@@ -8,7 +8,7 @@ import argv from './argv.js';
 import { createProgressBar } from './progress.js';
 import { getName } from './naming.js';
 
-function download (url, filename, index) {
+function _download (url, filename, index) {
   // console.log('download', url)
   return new Promise(((resolve, reject) => {
     try {
@@ -33,7 +33,7 @@ function download (url, filename, index) {
         fs.unlinkSync(filename);
       } catch (_) {}
       setTimeout(() => {
-        download(url, filename).then(resolve);
+        _download(url, filename).then(resolve);
       }, 2000);
     }
 
@@ -64,7 +64,7 @@ function download (url, filename, index) {
   }));
 }
 
-export async function download2disk (url, index) {
+export async function download (url, index) {
   const data = await getDataByUrl(url);
   // console.log(initialState);
   const { videoData } = data;
@@ -90,6 +90,6 @@ export async function download2disk (url, index) {
   // console.log(playResult);
   const videoDownloadUrl = playResult.durl[0].url;
   // console.log(videoDownloadUrl);
-  await download(videoDownloadUrl, filename, index);
+  await _download(videoDownloadUrl, filename, index);
   return filename;
 }
