@@ -8,7 +8,10 @@ import axios from 'axios';
 
 async function _download(url, title, filename, index) {
   // console.log('download', url)
+  // let startByte = 0;
   try {
+    // const stat = await fs.promises.stat(filename);
+    // startByte = stat.size + 1;
     await fs.promises.stat(filename);
     await fs.promises.unlink(filename);
   } catch (err) {
@@ -20,27 +23,33 @@ async function _download(url, title, filename, index) {
       method: 'GET',
       responseType: 'stream',
       headers: {
-        Range: `bytes=0-`,
+        Range: `bytes=${0}-`,
         'User-Agent': 'PostmanRuntime/7.28.4',
         Referer: 'https://www.bilibili.com/',
       },
     })
       .then(({ data, headers }) => {
         const writeStream = fs.createWriteStream(filename);
-        const bar = createProgressBar(
-          index,
-          title,
-          parseInt(headers['content-length'], 10)
-        );
+        const total = parseInt(headers['content-length'], 10);
+        const bar = createProgressBar(index, title, total);
+        let failed = false;
         data.pipe(writeStream);
-        data.on('data', (chunk) =>
-          bar.tick(chunk.length, { status: 'downloading' })
-        );
+        data.on('data', (chunk) => {
+          if (failed) {
+            return;
+          }
+          bar.tick(chunk.length, { status: 'downloading' });
+        });
         data.on('end', () => {
+          if (failed) {
+            return;
+          }
           writeStream.close();
           resolve(bar);
         });
         data.on('error', (err) => {
+          failed = true;
+          bar.tick(total);
           bar.tick({ status: 'error' });
           writeStream.close();
           reject(err);
