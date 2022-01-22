@@ -17,4 +17,5 @@ export async function flv2mp3(filename) {
     resolve(process.cwd(), after),
     ffmpeg.FS('readFile', 'after.mp3')
   );
+  ffmpeg.exit();
 }
