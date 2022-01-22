@@ -1,6 +1,6 @@
 import { download } from './download.js';
 import { flv2mp3 } from './flv2mp3.js';
-import fs from 'fs';
+import * as fs from 'fs';
 import argv from './argv.js';
 
 export async function download2mp3 ({ url, index }) {
@@ -10,7 +10,7 @@ export async function download2mp3 ({ url, index }) {
       return;
     }
     await flv2mp3(filename);
-    fs.unlinkSync(filename);
+    await fs.promises.unlink(filename);
   } catch (err) {
     console.error(`${url} error:`);
     console.error(err);

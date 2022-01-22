@@ -1,5 +1,5 @@
-import fs from 'fs';
-import crypto from 'crypto';
+import * as fs from 'fs';
+import { createHash } from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
 import argv from './argv.js';
 import { createProgressBar } from './progress.js';
@@ -7,15 +7,16 @@ import { getName } from './naming.js';
 import agent from './agent.js';
 import axios from 'axios';
 
-function _download (url, filename, index) {
+async function _download (url, filename, index) {
   // console.log('download', url)
+  try {
+    await fs.promises.stat(filename);
+    await fs.promises.unlink(filename);
+  } catch (err) {
+    // ignore
+  }
   return new Promise((resolve, reject) => {
-    try {
-      fs.statSync(filename);
-      fs.unlinkSync(filename);
-    } catch (err) {
-      // ignore
-    }
+
 
     agent({
       url,
@@ -65,7 +66,7 @@ export async function download (url, index) {
   // console.log('cid:', cid);
 
   const params = `appkey=iVGUTjsxvpLeuDCf&cid=${cid}&otype=json&qn=112&quality=112&type=`;
-  const sign = crypto.createHash('md5').update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt').digest('hex');
+  const sign = createHash('md5').update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt').digest('hex');
   const playUrl = `https://interface.bilibili.com/v2/playurl?${params}&sign=${sign}`;
 
   const playResult = await axios.get(playUrl);
