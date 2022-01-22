@@ -1,8 +1,8 @@
-import fetch from 'node-fetch';
+import agent from './agent.js';
 
 export async function getDataByUrl (url) {
-  const htmlPage = await (await fetch(url)).text();
-  // console.log(htmlPage);
-  const initialStateStr = htmlPage.match(/__INITIAL_STATE__=(.*?);/)[1];
+  const { data } = await agent.get(url);
+  // console.log(data)
+  const initialStateStr = data.match(/__INITIAL_STATE__=(.*?);/)[1];
   return JSON.parse(initialStateStr);
 }

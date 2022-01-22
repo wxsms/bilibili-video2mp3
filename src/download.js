@@ -1,16 +1,15 @@
-import https from 'https';
-import http from 'http';
 import fs from 'fs';
-import fetch from 'node-fetch';
 import crypto from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
 import argv from './argv.js';
 import { createProgressBar } from './progress.js';
 import { getName } from './naming.js';
+import agent from './agent.js';
+import axios from 'axios';
 
 function _download (url, filename, index) {
   // console.log('download', url)
-  return new Promise(((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
       fs.statSync(filename);
       fs.unlinkSync(filename);
@@ -18,50 +17,33 @@ function _download (url, filename, index) {
       // ignore
     }
 
-    const writeStream = fs.createWriteStream(filename);
-    let retried = false;
-    let request;
-
-    function retry () {
-      if (retried) {
-        return;
-      }
-      retried = true;
-      request.abort();
-      writeStream.close();
-      try {
-        fs.unlinkSync(filename);
-      } catch (_) {}
-      setTimeout(() => {
-        _download(url, filename).then(resolve);
-      }, 2000);
-    }
-
-    request = (url.startsWith('https') ? https : http)
-      .get(url, {
-        url: url, headers: {
-          'Range': `bytes=0-`,
-          'User-Agent': 'PostmanRuntime/7.28.4',
-          'Referer': 'https://www.bilibili.com/'
-        },
-        // timeout: 20
-      }, function (response) {
-        response.pipe(writeStream);
-        const bar = createProgressBar(index, filename, parseInt(response.headers['content-length'], 10));
-        response.on('data', function (chunk) {
-          bar.tick(chunk.length);
-        });
-
-        response.on('end', () => {
+    agent({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+      headers: {
+        'Range': `bytes=0-`,
+        'User-Agent': 'PostmanRuntime/7.28.4',
+        'Referer': 'https://www.bilibili.com/'
+      },
+    })
+      .then(({ data, headers }) => {
+        const writeStream = fs.createWriteStream(filename);
+        const bar = createProgressBar(index, filename, parseInt(headers['content-length'], 10));
+        data.pipe(writeStream);
+        data.on('data', (chunk) => bar.tick(chunk.length));
+        data.on('end', () => {
           writeStream.close();
           resolve();
         });
-
-        writeStream.on('error', retry);
+        data.on('error', () => {
+          writeStream.close();
+        })
+      })
+      .catch(err => {
+        reject(err);
       });
-    request.on('error', retry);
-    request.on('timeout', retry);
-  }));
+  });
 }
 
 export async function download (url, index) {
@@ -86,9 +68,9 @@ export async function download (url, index) {
   const sign = crypto.createHash('md5').update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt').digest('hex');
   const playUrl = `https://interface.bilibili.com/v2/playurl?${params}&sign=${sign}`;
 
-  const playResult = await (await fetch(playUrl)).json();
+  const playResult = await axios.get(playUrl);
   // console.log(playResult);
-  const videoDownloadUrl = playResult.durl[0].url;
+  const videoDownloadUrl = playResult.data.durl[0].url;
   // console.log(videoDownloadUrl);
   await _download(videoDownloadUrl, filename, index);
   return filename;

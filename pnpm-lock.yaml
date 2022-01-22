@@ -1,20 +1,59 @@
 lockfileVersion: 5.3
 
 specifiers:
+  axios: ^0.25.0
+  axios-retry: ^3.2.4
   lodash-es: ^4.17.21
   minimist: ^1.2.5
   multi-progress: ^4.0.0
-  node-fetch: ^3.1.0
   progress: ^2.0.3
 
 dependencies:
+  axios: 0.25.0
+  axios-retry: 3.2.4
   lodash-es: mirrors.tencent.com/lodash-es/4.17.21
   minimist: mirrors.tencent.com/minimist/1.2.5
   multi-progress: 4.0.0_progress@2.0.3
-  node-fetch: mirrors.tencent.com/node-fetch/3.1.0
   progress: 2.0.3
 
 packages:
+
+  /@babel/runtime/7.16.7:
+    resolution: {integrity: sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.9
+    dev: false
+
+  /axios-retry/3.2.4:
+    resolution: {integrity: sha512-Co3UXiv4npi6lM963mfnuH90/YFLKWWDmoBYfxkHT5xtkSSWNqK9zdG3fw5/CP/dsoKB5aMMJCsgab+tp1OxLQ==}
+    dependencies:
+      '@babel/runtime': 7.16.7
+      is-retry-allowed: 2.2.0
+    dev: false
+
+  /axios/0.25.0:
+    resolution: {integrity: sha512-cD8FOb0tRH3uuEe6+evtAbgJtfxr7ly3fQjYcMcuPlgkwVS9xboaVIpcDV+cYQe+yGykgwZCs1pzjntcGa6l5g==}
+    dependencies:
+      follow-redirects: 1.14.7
+    transitivePeerDependencies:
+      - debug
+    dev: false
+
+  /follow-redirects/1.14.7:
+    resolution: {integrity: sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+    dev: false
+
+  /is-retry-allowed/2.2.0:
+    resolution: {integrity: sha512-XVm7LOeLpTW4jV19QSH38vkswxoLud8sQ57YwJVTPWdiaI9I8keEhGFpBlslyVsgdQy4Opg8QOLb8YRgsyZiQg==}
+    engines: {node: '>=10'}
+    dev: false
 
   /multi-progress/4.0.0_progress@2.0.3:
     resolution: {integrity: sha512-9zcjyOou3FFCKPXsmkbC3ethv51SFPoA4dJD6TscIp2pUmy26kBDZW6h9XofPELrzseSkuD7r0V+emGEeo39Pg==}
@@ -29,29 +68,8 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: false
 
-  mirrors.tencent.com/data-uri-to-buffer/4.0.0:
-    resolution: {integrity: sha512-Vr3mLBA8qWmcuschSLAOogKgQ/Jwxulv3RNE4FXnYWRGujzrRWQI4m12fQqRkwX06C0KanhLr4hK+GydchZsaA==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: http://mirrors.tencent.com/npm/data-uri-to-buffer/-/data-uri-to-buffer-4.0.0.tgz}
-    name: data-uri-to-buffer
-    version: 4.0.0
-    engines: {node: '>= 12'}
-    dev: false
-
-  mirrors.tencent.com/fetch-blob/3.1.3:
-    resolution: {integrity: sha512-ax1Y5I9w+9+JiM+wdHkhBoxew+zG4AJ2SvAD1v1szpddUIiPERVGBxrMcB2ZqW0Y3PP8bOWYv2zqQq1Jp2kqUQ==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: https://mirrors.tencent.com/npm/fetch-blob/-/fetch-blob-3.1.3.tgz}
-    name: fetch-blob
-    version: 3.1.3
-    engines: {node: ^12.20 || >= 14.13}
-    dependencies:
-      web-streams-polyfill: mirrors.tencent.com/web-streams-polyfill/3.2.0
-    dev: false
-
-  mirrors.tencent.com/formdata-polyfill/4.0.10:
-    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: https://mirrors.tencent.com/npm/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz}
-    name: formdata-polyfill
-    version: 4.0.10
-    engines: {node: '>=12.20.0'}
-    dependencies:
-      fetch-blob: mirrors.tencent.com/fetch-blob/3.1.3
+  /regenerator-runtime/0.13.9:
+    resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
     dev: false
 
   mirrors.tencent.com/lodash-es/4.17.21:
@@ -64,22 +82,4 @@ packages:
     resolution: {integrity: sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: https://mirrors.tencent.com/npm/minimist/-/minimist-1.2.5.tgz}
     name: minimist
     version: 1.2.5
-    dev: false
-
-  mirrors.tencent.com/node-fetch/3.1.0:
-    resolution: {integrity: sha512-QU0WbIfMUjd5+MUzQOYhenAazakV7Irh1SGkWCsRzBwvm4fAhzEUaHMJ6QLP7gWT6WO9/oH2zhKMMGMuIrDyKw==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: http://mirrors.tencent.com/npm/node-fetch/-/node-fetch-3.1.0.tgz}
-    name: node-fetch
-    version: 3.1.0
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-    dependencies:
-      data-uri-to-buffer: mirrors.tencent.com/data-uri-to-buffer/4.0.0
-      fetch-blob: mirrors.tencent.com/fetch-blob/3.1.3
-      formdata-polyfill: mirrors.tencent.com/formdata-polyfill/4.0.10
-    dev: false
-
-  mirrors.tencent.com/web-streams-polyfill/3.2.0:
-    resolution: {integrity: sha512-EqPmREeOzttaLRm5HS7io98goBgZ7IVz79aDvqjD0kYXLtFZTc0T/U6wHTPKyIjb+MdN7DFIIX6hgdBEpWmfPA==, registry: https://mirrors.cloud.tencent.com/npm/, tarball: http://mirrors.tencent.com/npm/web-streams-polyfill/-/web-streams-polyfill-3.2.0.tgz}
-    name: web-streams-polyfill
-    version: 3.2.0
-    engines: {node: '>= 8'}
     dev: false
