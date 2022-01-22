@@ -42,6 +42,7 @@ async function _download(url, title, filename, index) {
         });
         data.on('error', () => {
           writeStream.close();
+          reject(new Error('socket error'));
         });
       })
       .catch((err) => {
