@@ -1,9 +1,8 @@
 import Progress from 'multi-progress';
 import { program } from 'commander';
+import { sleep } from './utils.js';
 
 const multi = new Progress(process.stderr);
-
-const sleep = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 let prevIndex = -1;
 

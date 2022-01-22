@@ -13,7 +13,7 @@ export async function download2mp3({ url, index }) {
     await flv2mp3(filename);
     await fs.promises.unlink(filename);
   } catch (err) {
-    console.error(`${url} error:`);
     console.error(err);
+    await download2mp3({ url, index });
   }
 }

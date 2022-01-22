@@ -1,21 +1,31 @@
 import { fetchFile, createFFmpeg } from '@ffmpeg/ffmpeg';
 import * as fs from 'fs';
 import { resolve } from 'path';
+import { uniqueId, noop } from 'lodash-es';
+import { sleep } from './utils.js';
+
+let ffmpeg = createFFmpeg({ log: false });
+ffmpeg.load().then(noop);
 
 export async function flv2mp3(filename) {
-  const after = filename.replace('.flv', '.mp3');
-  const ffmpeg = createFFmpeg({ log: false });
-  await ffmpeg.load();
+  while (!ffmpeg.isLoaded()) {
+    await sleep(100);
+  }
+  const id = uniqueId();
+  const mp3 = filename.replace('.flv', '.mp3');
+  const memBefore = `${id}before.flv`;
+  const memAfter = `${id}after.mp3`;
   ffmpeg.FS(
     'writeFile',
-    'before.flv',
+    memBefore,
     await fetchFile(resolve(process.cwd(), filename))
   );
   // ffmpeg -y -i ${filename} -q:a 0 ${mp3}
-  await ffmpeg.run('-y', '-i', 'before.flv', '-q:a', '0', 'after.mp3');
+  await ffmpeg.run('-y', '-i', memBefore, '-q:a', '0', memAfter);
   await fs.promises.writeFile(
-    resolve(process.cwd(), after),
-    ffmpeg.FS('readFile', 'after.mp3')
+    resolve(process.cwd(), mp3),
+    ffmpeg.FS('readFile', memAfter)
   );
-  ffmpeg.exit();
+  ffmpeg.FS('unlink', memBefore);
+  ffmpeg.FS('unlink', memAfter);
 }
