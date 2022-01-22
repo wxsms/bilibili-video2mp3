@@ -3,7 +3,7 @@ import Progress from 'multi-progress';
 const multi = new Progress(process.stderr);
 
 export function createProgressBar(index, title, total) {
-  return multi.newBar(`${index} ${title}\t\t[:bar] :percent :etas :status`, {
+  return multi.newBar(`${index} [:bar] :percent :etas :status ${title}`, {
     complete: '=',
     incomplete: ' ',
     width: 30,
