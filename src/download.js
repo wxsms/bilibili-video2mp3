@@ -27,19 +27,23 @@ async function _download(url, filename, index) {
     })
       .then(({ data, headers }) => {
         const writeStream = fs.createWriteStream(filename);
-        const bar = createProgressBar(
-          index,
-          filename,
-          parseInt(headers['content-length'], 10)
-        );
         data.pipe(writeStream);
-        data.on('data', (chunk) => bar.tick(chunk.length));
         data.on('end', () => {
           writeStream.close();
           resolve();
         });
         data.on('error', () => {
           writeStream.close();
+        });
+        let bar;
+        data.on('data', (chunk) => bar && bar.tick(chunk.length));
+
+        createProgressBar(
+          index,
+          filename,
+          parseInt(headers['content-length'], 10)
+        ).then((res) => {
+          bar = res;
         });
       })
       .catch((err) => {
