@@ -41,6 +41,7 @@ async function _download(url, title, filename, index) {
           resolve(bar);
         });
         data.on('error', (err) => {
+          bar.tick({ status: 'error' });
           writeStream.close();
           reject(err);
         });

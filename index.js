@@ -44,7 +44,8 @@ program
     '--skip-mp3',
     'skip the mp3 transform and keep downloaded file as video.',
     false
-  );
+  )
+  .option('--debug', 'enable debug log.', false);
 
 program.parse(process.argv);
 const argv = program.opts();

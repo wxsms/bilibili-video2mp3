@@ -6,8 +6,8 @@ import { sleep } from './utils.js';
 import { resolve } from 'path';
 
 export async function download2mp3({ url, index }) {
+  const argv = program.opts();
   try {
-    const argv = program.opts();
     const { filename, bar } = await download(url, index);
     if (argv.skipMp3) {
       return;
@@ -16,11 +16,13 @@ export async function download2mp3({ url, index }) {
     await fs.promises.unlink(filename);
     bar.tick({ status: 'done' });
   } catch (err) {
-    const logFile = resolve(process.cwd(), 'bilibili-video2mp3-error.log');
-    await fs.promises.appendFile(
-      logFile,
-      `index: ${index}\n` + `url: ${url}\n` + err.stack + '\n\n'
-    );
+    if (argv.debug) {
+      const logFile = resolve(process.cwd(), 'bilibili-video2mp3-error.log');
+      await fs.promises.appendFile(
+        logFile,
+        `index: ${index}\n` + `url: ${url}\n` + err.stack + '\n\n'
+      );
+    }
     await sleep(2000);
     await download2mp3({ url, index });
   }
