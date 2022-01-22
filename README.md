@@ -5,7 +5,7 @@ A tool to download all videos and convert to mp3 inside a video set of bilibili 
 You will need node.js (recommended 16+) installed.
 
 ```
-npx bilibili-video2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3
+npx bv2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3
 ```
 
 output sample:
@@ -24,5 +24,5 @@ downloading [==========                    ] 34% 78.3s 知否知否-yousa-2021-1
 options:
 
 ```
-npx bilibili-video2mp3 --help
+npx bv2mp3 --help
 ```

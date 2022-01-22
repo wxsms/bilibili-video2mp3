@@ -1,11 +1,19 @@
 {
-  "name": "bilibili-video2mp3",
+  "name": "bv2mp3",
   "version": "1.0.8",
-  "description": "",
+  "description": "A tool to download all videos and convert to mp3 inside a video set of bilibili (also works for single video, of course).",
   "bin": "index.js",
   "type": "module",
-  "author": "",
+  "author": "wxsms@foxmail.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wxsms/bilibili-video2mp3.git"
+  },
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
+  },
+  "homepage": "https://github.com/wxsms/bilibili-video2mp3",
   "engines": {
     "node": ">=16.0.0"
   },
