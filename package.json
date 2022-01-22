@@ -6,6 +6,9 @@
   "type": "module",
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "lint": "npx eslint . --fix"
+  },
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
@@ -16,5 +19,35 @@
     "minimist": "^1.2.5",
     "multi-progress": "^4.0.0",
     "progress": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "rules": {
+      "prettier/prettier": ["error", {
+        "semi": true,
+        "singleQuote": true,
+        "endOfLine": "auto"
+      }]
+    }
   }
 }

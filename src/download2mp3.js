@@ -3,7 +3,7 @@ import { flv2mp3 } from './flv2mp3.js';
 import * as fs from 'fs';
 import { program } from 'commander';
 
-export async function download2mp3 ({ url, index }) {
+export async function download2mp3({ url, index }) {
   try {
     const argv = program.opts();
     const filename = await download(url, index);

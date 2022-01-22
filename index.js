@@ -10,13 +10,28 @@ const pkg = require('./package.json');
 program.version(pkg.version);
 
 program
-  .requiredOption('--url [urls...]', `the video set (or single) url of bilibili.`)
+  .requiredOption(
+    '--url [urls...]',
+    `the video set (or single) url of bilibili.`
+  )
   .option('--from <number>', 'limit to page download from, 1-based.', parseInt)
   .option('--to <number>', 'limit to page download to, 1-based.', parseInt)
   .option('--threads <number>', 'how many download threads.', parseInt, 5)
-  .option('--naming <string>', `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`, 'TITLE-AUTHOR-DATE')
-  .option('--index-offset <number>', 'offset added to INDEX while saved.', parseInt)
-  .option('--skip-mp3', 'skip the mp3 transform and keep downloaded file as video.', false);
+  .option(
+    '--naming <string>',
+    `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
+    'TITLE-AUTHOR-DATE'
+  )
+  .option(
+    '--index-offset <number>',
+    'offset added to INDEX while saved.',
+    parseInt
+  )
+  .option(
+    '--skip-mp3',
+    'skip the mp3 transform and keep downloaded file as video.',
+    false
+  );
 
 program.parse(process.argv);
 const argv = program.opts();
@@ -32,20 +47,30 @@ const argv = program.opts();
     const data = await getDataByUrl(url);
     // console.log(data);
     // console.log(`total threads: ${data.videoData.pages.length}`);
-    pages = [...pages, ...data.videoData.pages
-      .map((value, index) => {
+    pages = [
+      ...pages,
+      ...data.videoData.pages.map((value, index) => {
         const p = index + 1;
-        return url.indexOf('p=') > 0 ? url.replace(/p=\d+/, `p=${p}`) : `${url.replace(/\?.+/, '')}?p=${p}`;
-      })];
+        return url.indexOf('p=') > 0
+          ? url.replace(/p=\d+/, `p=${p}`)
+          : `${url.replace(/\?.+/, '')}?p=${p}`;
+      }),
+    ];
   }
   pages = pages
     .map((value, index) => {
       return {
         url: value,
-        index: index + 1
+        index: index + 1,
       };
     })
-    .filter(({ index }) => !((typeof argv.from === 'number' && index < argv.from) || (typeof argv.to === 'number' && index > argv.to)));
+    .filter(
+      ({ index }) =>
+        !(
+          (typeof argv.from === 'number' && index < argv.from) ||
+          (typeof argv.to === 'number' && index > argv.to)
+        )
+    );
 
   const pageChunks = chunk(pages, argv.threads || 5);
   for (const c of pageChunks) {

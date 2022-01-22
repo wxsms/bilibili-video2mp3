@@ -6,7 +6,7 @@ import { getName } from './naming.js';
 import agent from './agent.js';
 import axios from 'axios';
 
-async function _download (url, filename, index) {
+async function _download(url, filename, index) {
   // console.log('download', url)
   try {
     await fs.promises.stat(filename);
@@ -15,21 +15,23 @@ async function _download (url, filename, index) {
     // ignore
   }
   return new Promise((resolve, reject) => {
-
-
     agent({
       url,
       method: 'GET',
       responseType: 'stream',
       headers: {
-        'Range': `bytes=0-`,
+        Range: `bytes=0-`,
         'User-Agent': 'PostmanRuntime/7.28.4',
-        'Referer': 'https://www.bilibili.com/'
+        Referer: 'https://www.bilibili.com/',
       },
     })
       .then(({ data, headers }) => {
         const writeStream = fs.createWriteStream(filename);
-        const bar = createProgressBar(index, filename, parseInt(headers['content-length'], 10));
+        const bar = createProgressBar(
+          index,
+          filename,
+          parseInt(headers['content-length'], 10)
+        );
         data.pipe(writeStream);
         data.on('data', (chunk) => bar.tick(chunk.length));
         data.on('end', () => {
@@ -38,15 +40,15 @@ async function _download (url, filename, index) {
         });
         data.on('error', () => {
           writeStream.close();
-        })
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
 }
 
-export async function download (url, index) {
+export async function download(url, index) {
   const data = await getDataByUrl(url);
   // console.log(initialState);
   const { videoData } = data;
@@ -55,9 +57,14 @@ export async function download (url, index) {
   // const aid = videoData.aid;
   const pid = data.p;
   const cid = pages[pid - 1].cid;
-  const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(/\s/g, '-');
+  const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(
+    /\s/g,
+    '-'
+  );
   const date = new Date(videoData.ctime * 1000);
-  const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const dateString = `${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()}`;
   const author = videoData.owner.name;
   const filename = `${getName(index, title, author, dateString)}.flv`;
   // console.log('aid:', aid);
@@ -65,7 +72,9 @@ export async function download (url, index) {
   // console.log('cid:', cid);
 
   const params = `appkey=iVGUTjsxvpLeuDCf&cid=${cid}&otype=json&qn=112&quality=112&type=`;
-  const sign = createHash('md5').update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt').digest('hex');
+  const sign = createHash('md5')
+    .update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt')
+    .digest('hex');
   const playUrl = `https://interface.bilibili.com/v2/playurl?${params}&sign=${sign}`;
 
   const playResult = await axios.get(playUrl);
