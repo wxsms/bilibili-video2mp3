@@ -6,12 +6,13 @@ import { program } from 'commander';
 export async function download2mp3({ url, index }) {
   try {
     const argv = program.opts();
-    const filename = await download(url, index);
+    const { filename, bar } = await download(url, index);
     if (argv.skipMp3) {
       return;
     }
-    await flv2mp3(filename);
+    await flv2mp3(filename, bar);
     await fs.promises.unlink(filename);
+    bar.tick({ status: 'done' });
   } catch (err) {
     console.error(err);
     await download2mp3({ url, index });

@@ -6,11 +6,15 @@ import { sleep } from './utils.js';
 
 let ffmpeg = createFFmpeg({ log: false });
 ffmpeg.load().then(noop);
+let isRunning = false;
 
-export async function flv2mp3(filename) {
-  while (!ffmpeg.isLoaded()) {
-    await sleep(100);
+export async function flv2mp3(filename, bar) {
+  while (!ffmpeg.isLoaded() || isRunning) {
+    bar.tick({ status: 'queueing' });
+    await sleep(1000);
   }
+  bar.tick({ status: 'converting' });
+  isRunning = true;
   const id = uniqueId();
   const mp3 = filename.replace('.flv', '.mp3');
   const memBefore = `${id}before.flv`;
@@ -28,4 +32,5 @@ export async function flv2mp3(filename) {
   );
   ffmpeg.FS('unlink', memBefore);
   ffmpeg.FS('unlink', memAfter);
+  isRunning = false;
 }

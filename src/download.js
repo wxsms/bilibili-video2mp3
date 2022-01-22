@@ -6,7 +6,7 @@ import { getName } from './naming.js';
 import agent from './agent.js';
 import axios from 'axios';
 
-async function _download(url, filename, index) {
+async function _download(url, title, filename, index) {
   // console.log('download', url)
   try {
     await fs.promises.stat(filename);
@@ -29,14 +29,16 @@ async function _download(url, filename, index) {
         const writeStream = fs.createWriteStream(filename);
         const bar = createProgressBar(
           index,
-          filename,
+          title,
           parseInt(headers['content-length'], 10)
         );
         data.pipe(writeStream);
-        data.on('data', (chunk) => bar.tick(chunk.length));
+        data.on('data', (chunk) =>
+          bar.tick(chunk.length, { status: 'downloading' })
+        );
         data.on('end', () => {
           writeStream.close();
-          resolve();
+          resolve(bar);
         });
         data.on('error', () => {
           writeStream.close();
@@ -81,6 +83,6 @@ export async function download(url, index) {
   // console.log(playResult);
   const videoDownloadUrl = playResult.data.durl[0].url;
   // console.log(videoDownloadUrl);
-  await _download(videoDownloadUrl, filename, index);
-  return filename;
+  const bar = await _download(videoDownloadUrl, title, filename, index);
+  return { filename, bar };
 }
