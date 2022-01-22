@@ -2,7 +2,7 @@
 
 A tool to download all videos and convert to mp3 inside a video set of bilibili (also works for single video, of course).
 
-You will need node.js (recommended 16+) installed and ffmpeg in system path first.
+You will need node.js (recommended 16+) installed.
 
 ```
 npx bilibili-video2mp3 --url=https://www.bilibili.com/video/BV1yZ4y1X7v3
