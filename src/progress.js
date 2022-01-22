@@ -8,6 +8,6 @@ export function createProgressBar(index, title, total) {
     incomplete: ' ',
     width: 30,
     total: total,
-    renderThrottle: 1000,
+    // renderThrottle: 1000,
   });
 }
