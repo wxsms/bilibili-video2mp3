@@ -6,6 +6,9 @@
   "type": "module",
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "lint": "npx eslint . --fix"
   },
@@ -43,11 +46,14 @@
       "sourceType": "module"
     },
     "rules": {
-      "prettier/prettier": ["error", {
-        "semi": true,
-        "singleQuote": true,
-        "endOfLine": "auto"
-      }]
+      "prettier/prettier": [
+        "error",
+        {
+          "semi": true,
+          "singleQuote": true,
+          "endOfLine": "auto"
+        }
+      ]
     }
   }
 }
