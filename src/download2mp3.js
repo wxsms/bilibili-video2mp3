@@ -9,11 +9,10 @@ export async function download2mp3({ url, index }) {
   const argv = program.opts();
   try {
     const { filename, bar } = await download(url, index);
-    if (argv.skipMp3) {
-      return;
+    if (!argv.skipMp3) {
+      await flv2mp3(filename, bar);
+      await fs.promises.unlink(filename);
     }
-    await flv2mp3(filename, bar);
-    await fs.promises.unlink(filename);
     bar.tick({ status: 'done' });
   } catch (err) {
     if (argv.debug) {

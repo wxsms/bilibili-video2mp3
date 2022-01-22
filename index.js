@@ -29,7 +29,7 @@ program
     validateInt
   )
   .option('--to <number>', 'limit to page download to, 1-based.', validateInt)
-  .option('--threads <number>', 'how many download threads.', validateInt, 5)
+  .option('--threads <number>', 'how many download threads.', validateInt, 10)
   .option(
     '--naming <string>',
     `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
