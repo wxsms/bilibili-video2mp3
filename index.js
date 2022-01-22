@@ -1,46 +1,30 @@
 #!/usr/bin/env node
-
+import { program } from 'commander';
 import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
-import argv from './src/argv.js';
-import { help } from './src/help.js';
 import { createRequire } from 'module';
 import { chunk } from 'lodash-es';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
+program.version(pkg.version);
 
-// process.on('uncaughtException', err => {
-//   for (let i = 1; i <= 100; ++i) {
-//     console.log();
-//   }
-//   console.error(err);
-//   process.exit(1); //mandatory (as per the Node.js docs)
-// });
+program
+  .requiredOption('--url [urls...]', `the video set (or single) url of bilibili.`)
+  .option('--from <number>', 'limit to page download from, 1-based.', parseInt)
+  .option('--to <number>', 'limit to page download to, 1-based.', parseInt)
+  .option('--threads <number>', 'how many download threads.', parseInt, 5)
+  .option('--naming <string>', `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`, 'TITLE-AUTHOR-DATE')
+  .option('--index-offset <number>', 'offset added to INDEX while saved.', parseInt)
+  .option('--skip-mp3', 'skip the mp3 transform and keep downloaded file as video.', false);
+
+program.parse(process.argv);
+const argv = program.opts();
+// console.log(argv);
 
 (async function () {
-  if (argv.help) {
-    console.log(help);
-    return;
-  }
-
-  if (argv.version) {
-    console.log(pkg.version);
-    return;
-  }
-
-  if (!argv.url) {
-    throw new Error('Please specify url to download');
-  }
-
-  let urls = argv.url;
-  const from = argv.from;
-  const to = argv.to;
+  const urls = typeof argv.url === 'string' ? [argv.url] : argv.url;
   let pages = [];
-
-  if (typeof urls === 'string') {
-    urls = [urls];
-  }
 
   for (let url of urls) {
     url = url.trim();
@@ -61,9 +45,7 @@ const pkg = require('./package.json');
         index: index + 1
       };
     })
-    .filter(({ index }) => {
-      return !((typeof from === 'number' && index < from) || (typeof to === 'number' && index > to));
-    });
+    .filter(({ index }) => !((typeof argv.from === 'number' && index < argv.from) || (typeof argv.to === 'number' && index > argv.to)));
 
   const pageChunks = chunk(pages, argv.threads || 5);
   for (const c of pageChunks) {

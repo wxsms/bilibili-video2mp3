@@ -1,12 +1,13 @@
 import { download } from './download.js';
 import { flv2mp3 } from './flv2mp3.js';
 import * as fs from 'fs';
-import argv from './argv.js';
+import { program } from 'commander';
 
 export async function download2mp3 ({ url, index }) {
   try {
+    const argv = program.opts();
     const filename = await download(url, index);
-    if (argv['skip-mp3']) {
+    if (argv.skipMp3) {
       return;
     }
     await flv2mp3(filename);

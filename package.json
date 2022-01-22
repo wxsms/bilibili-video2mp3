@@ -11,6 +11,7 @@
     "@ffmpeg/ffmpeg": "^0.10.1",
     "axios": "^0.25.0",
     "axios-retry": "^3.2.4",
+    "commander": "^8.3.0",
     "lodash-es": "^4.17.21",
     "minimist": "^1.2.5",
     "multi-progress": "^4.0.0",

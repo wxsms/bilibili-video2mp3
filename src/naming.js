@@ -1,10 +1,8 @@
-import argv from './argv.js';
-
-const defaultPattern = 'TITLE-AUTHOR-DATE';
+import { program } from 'commander';
 
 export function getName (index, title, author, date) {
-  const p = argv.naming || defaultPattern;
-  return p
+  const argv = program.opts();
+  return argv.naming
     .replace('INDEX', (argv['index-offset'] || 0) + index)
     .replace('TITLE', title)
     .replace('AUTHOR', author)

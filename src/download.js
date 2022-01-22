@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import { createHash } from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
-import argv from './argv.js';
 import { createProgressBar } from './progress.js';
 import { getName } from './naming.js';
 import agent from './agent.js';
@@ -59,7 +58,7 @@ export async function download (url, index) {
   const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(/\s/g, '-');
   const date = new Date(videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  const author = argv.author || videoData.owner.name;
+  const author = videoData.owner.name;
   const filename = `${getName(index, title, author, dateString)}.flv`;
   // console.log('aid:', aid);
   // console.log('pid:', pid);

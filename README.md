@@ -21,7 +21,7 @@ downloading [============                  ] 41% 57.4s 日出日落-yousa-2021-1
 downloading [==========                    ] 34% 78.3s 知否知否-yousa-2021-12-26.flv
 ```
 
-options, see [help.js](https://github.com/wxsms/bilibili-video2mp3/blob/master/src/help.js) or:
+options:
 
 ```
 npx bilibili-video2mp3 --help

@@ -5,6 +5,7 @@ specifiers:
   '@ffmpeg/ffmpeg': ^0.10.1
   axios: ^0.25.0
   axios-retry: ^3.2.4
+  commander: ^8.3.0
   lodash-es: ^4.17.21
   minimist: ^1.2.5
   multi-progress: ^4.0.0
@@ -15,6 +16,7 @@ dependencies:
   '@ffmpeg/ffmpeg': 0.10.1
   axios: 0.25.0
   axios-retry: 3.2.4
+  commander: 8.3.0
   lodash-es: mirrors.tencent.com/lodash-es/4.17.21
   minimist: mirrors.tencent.com/minimist/1.2.5
   multi-progress: 4.0.0_progress@2.0.3
@@ -58,6 +60,11 @@ packages:
       follow-redirects: 1.14.7
     transitivePeerDependencies:
       - debug
+    dev: false
+
+  /commander/8.3.0:
+    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
+    engines: {node: '>= 12'}
     dev: false
 
   /follow-redirects/1.14.7:
