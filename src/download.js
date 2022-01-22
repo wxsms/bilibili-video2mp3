@@ -40,9 +40,9 @@ async function _download(url, title, filename, index) {
           writeStream.close();
           resolve(bar);
         });
-        data.on('error', () => {
+        data.on('error', (err) => {
           writeStream.close();
-          reject(new Error('socket error'));
+          reject(err);
         });
       })
       .catch((err) => {

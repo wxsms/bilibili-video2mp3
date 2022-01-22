@@ -1,7 +1,5 @@
 import axios from 'axios';
-import axiosRetry from 'axios-retry';
 
-const agent = axios.create();
-axiosRetry(agent, { retries: 3 });
+const agent = axios.create({ timeout: 0 });
 
 export default agent;
