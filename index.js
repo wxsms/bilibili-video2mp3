@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { program } from 'commander';
+import { program, InvalidArgumentError } from 'commander';
 import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
 import { createRequire } from 'module';
@@ -9,14 +9,27 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 program.version(pkg.version);
 
+function validateInt(value) {
+  // parseInt takes a string and a radix
+  const parsedValue = parseInt(value, 10);
+  if (isNaN(parsedValue)) {
+    throw new InvalidArgumentError('Not a number.');
+  }
+  return parsedValue;
+}
+
 program
   .requiredOption(
     '--url [urls...]',
     `the video set (or single) url of bilibili.`
   )
-  .option('--from <number>', 'limit to page download from, 1-based.', parseInt)
-  .option('--to <number>', 'limit to page download to, 1-based.', parseInt)
-  .option('--threads <number>', 'how many download threads.', parseInt, 5)
+  .option(
+    '--from <number>',
+    'limit to page download from, 1-based.',
+    validateInt
+  )
+  .option('--to <number>', 'limit to page download to, 1-based.', validateInt)
+  .option('--threads <number>', 'how many download threads.', validateInt, 5)
   .option(
     '--naming <string>',
     `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
@@ -25,7 +38,7 @@ program
   .option(
     '--index-offset <number>',
     'offset added to INDEX while saved.',
-    parseInt
+    validateInt
   )
   .option(
     '--skip-mp3',
