@@ -1,6 +1,6 @@
 {
   "name": "bv2mp3",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A tool to download all videos and convert to mp3 inside a video set of bilibili (also works for single video, of course).",
   "bin": "index.js",
   "type": "module",
