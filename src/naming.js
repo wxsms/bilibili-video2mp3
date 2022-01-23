@@ -4,7 +4,7 @@ export function getName(index, title, author, date) {
   const argv = program.opts();
   return (
     argv.naming
-      .replace('INDEX', (argv.indexOffset || 0) + index)
+      .replace('INDEX', index)
       .replace('TITLE', title)
       .replace('AUTHOR', author)
       .replace('DATE', date)

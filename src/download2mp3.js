@@ -7,8 +7,9 @@ import { resolve } from 'path';
 
 export async function download2mp3({ url, index }) {
   const argv = program.opts();
+  const offsetIndex = (argv.indexOffset || 0) + index;
   try {
-    const { filename, bar } = await download(url, index);
+    const { filename, bar } = await download(url, offsetIndex);
     if (!argv.skipMp3) {
       await flv2mp3(filename, bar);
       await fs.promises.unlink(filename);
@@ -19,7 +20,7 @@ export async function download2mp3({ url, index }) {
       const logFile = resolve(process.cwd(), 'bilibili-video2mp3-error.log');
       await fs.promises.appendFile(
         logFile,
-        `index: ${index}\n` + `url: ${url}\n` + err.stack + '\n\n'
+        `index: ${offsetIndex}\n` + `url: ${url}\n` + err.stack + '\n\n'
       );
     }
     await sleep(2000);
