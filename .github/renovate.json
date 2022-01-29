@@ -12,5 +12,6 @@
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
-  ]
+  ],
+  "automergeType": "branch"
 }
