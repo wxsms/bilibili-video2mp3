@@ -4,7 +4,7 @@ specifiers:
   '@ffmpeg/core': 0.10.0
   '@ffmpeg/ffmpeg': 0.10.1
   axios: 0.25.0
-  commander: 8.3.0
+  commander: 9.0.0
   eslint: 8.8.0
   eslint-config-prettier: 8.3.0
   eslint-plugin-prettier: 4.0.0
@@ -18,7 +18,7 @@ dependencies:
   '@ffmpeg/core': 0.10.0
   '@ffmpeg/ffmpeg': 0.10.1
   axios: 0.25.0
-  commander: 8.3.0
+  commander: 9.0.0
   lodash-es: 4.17.21
   minimist: 1.2.5
   multi-progress: 4.0.0_progress@2.0.3
@@ -162,9 +162,9 @@ packages:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
 
-  /commander/8.3.0:
-    resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
-    engines: {node: '>= 12'}
+  /commander/9.0.0:
+    resolution: {integrity: sha512-JJfP2saEKbQqvW+FI93OYUB4ByV5cizMpFMiiJI8xDbBvQvSkIk0VvQdn1CZ8mqAO8Loq2h0gYTYtDFUZUeERw==}
+    engines: {node: ^12.20.0 || >=14}
     dev: false
 
   /concat-map/0.0.1:
