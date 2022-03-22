@@ -26,7 +26,7 @@
     "axios": "0.26.1",
     "commander": "9.1.0",
     "lodash-es": "4.17.21",
-    "minimist": "1.2.5",
+    "minimist": "1.2.6",
     "multi-progress": "4.0.0",
     "progress": "2.0.3"
   },

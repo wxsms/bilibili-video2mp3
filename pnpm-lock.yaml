@@ -9,7 +9,7 @@ specifiers:
   eslint-config-prettier: 8.5.0
   eslint-plugin-prettier: 4.0.0
   lodash-es: 4.17.21
-  minimist: 1.2.5
+  minimist: 1.2.6
   multi-progress: 4.0.0
   prettier: 2.6.0
   progress: 2.0.3
@@ -20,7 +20,7 @@ dependencies:
   axios: 0.26.1
   commander: 9.1.0
   lodash-es: 4.17.21
-  minimist: 1.2.5
+  minimist: 1.2.6
   multi-progress: 4.0.0_progress@2.0.3
   progress: 2.0.3
 
@@ -508,8 +508,8 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /minimist/1.2.5:
-    resolution: {integrity: sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==}
+  /minimist/1.2.6:
+    resolution: {integrity: sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==}
     dev: false
 
   /ms/2.1.2:
