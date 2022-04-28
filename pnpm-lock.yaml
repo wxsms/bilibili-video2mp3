@@ -3,7 +3,7 @@ lockfileVersion: 5.3
 specifiers:
   '@ffmpeg/core': 0.10.0
   '@ffmpeg/ffmpeg': 0.10.1
-  axios: 0.27.0
+  axios: 0.27.2
   commander: 9.2.0
   eslint: 8.14.0
   eslint-config-prettier: 8.5.0
@@ -17,7 +17,7 @@ specifiers:
 dependencies:
   '@ffmpeg/core': 0.10.0
   '@ffmpeg/ffmpeg': 0.10.1
-  axios: 0.27.0
+  axios: 0.27.2
   commander: 9.2.0
   lodash-es: 4.17.21
   minimist: 1.2.6
@@ -123,8 +123,8 @@ packages:
     resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
     dev: false
 
-  /axios/0.27.0:
-    resolution: {integrity: sha512-XV/WrPxXfzgZ8j4lcB5i6LyaXmi90yetmV/Fem0kmglGx+mpY06CiweL3YxU6wOTNLmqLUePW4G8h45nGZ/+pA==}
+  /axios/0.27.2:
+    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
     dependencies:
       follow-redirects: 1.14.9
       form-data: 4.0.0
