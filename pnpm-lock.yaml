@@ -11,7 +11,7 @@ specifiers:
   lodash-es: 4.17.21
   minimist: 1.2.6
   multi-progress: 4.0.0
-  prettier: 2.7.0
+  prettier: 2.7.1
   progress: 2.0.3
 
 dependencies:
@@ -27,8 +27,8 @@ dependencies:
 devDependencies:
   eslint: 8.17.0
   eslint-config-prettier: 8.5.0_eslint@8.17.0
-  eslint-plugin-prettier: 4.0.0_69a96037af8480945d39efca5cfc2a19
-  prettier: 2.7.0
+  eslint-plugin-prettier: 4.0.0_3c82efea95883424a9dcf6342e14d9cb
+  prettier: 2.7.1
 
 packages:
 
@@ -234,7 +234,7 @@ packages:
       eslint: 8.17.0
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_69a96037af8480945d39efca5cfc2a19:
+  /eslint-plugin-prettier/4.0.0_3c82efea95883424a9dcf6342e14d9cb:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -247,7 +247,7 @@ packages:
     dependencies:
       eslint: 8.17.0
       eslint-config-prettier: 8.5.0_eslint@8.17.0
-      prettier: 2.7.0
+      prettier: 2.7.1
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -625,8 +625,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier/2.7.0:
-    resolution: {integrity: sha512-nwoX4GMFgxoPC6diHvSwmK/4yU8FFH3V8XWtLQrbj4IBsK2pkYhG4kf/ljF/haaZ/aii+wNJqISrCDPgxGWDVQ==}
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
