@@ -18,7 +18,8 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "lint": "npx eslint . --fix"
+    "lint": "npx eslint . --fix",
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
     "@ffmpeg/core": "0.10.0",
@@ -31,6 +32,7 @@
     "progress": "2.0.3"
   },
   "devDependencies": {
+    "conventional-changelog-cli": "^2.2.2",
     "eslint": "8.20.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
