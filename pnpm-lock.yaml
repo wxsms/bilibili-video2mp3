@@ -1,7 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@ffmpeg/core': 0.10.0
+  '@ffmpeg/core': 0.11.0
   '@ffmpeg/ffmpeg': 0.11.0
   axios: 0.27.2
   commander: 9.4.0
@@ -16,7 +16,7 @@ specifiers:
   progress: 2.0.3
 
 dependencies:
-  '@ffmpeg/core': 0.10.0
+  '@ffmpeg/core': 0.11.0
   '@ffmpeg/ffmpeg': 0.11.0
   axios: 0.27.2
   commander: 9.4.0
@@ -72,8 +72,8 @@ packages:
       - supports-color
     dev: true
 
-  /@ffmpeg/core/0.10.0:
-    resolution: {integrity: sha512-qunWJl5PezpXEm31tb8Qu5z37B5KVA1VYZCpXchMhuAb3X9T7PuE3SlhOwphEoRhzaOa3lpofDfzihAUMFaVPQ==}
+  /@ffmpeg/core/0.11.0:
+    resolution: {integrity: sha512-9Tt/+2PMpkGPXUK8n6He9G8Y+qR6qmCPSCw9iEKZxHHOvJ9BE/r0Fccj+YgDZTlyu6rXxc9x6EqCaFBIt7qzjA==}
     dev: false
 
   /@ffmpeg/ffmpeg/0.11.0:
