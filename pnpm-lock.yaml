@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ffmpeg/core': 0.11.0
-  '@ffmpeg/ffmpeg': 0.11.2
+  '@ffmpeg/ffmpeg': 0.11.3
   axios: 0.27.2
   commander: 9.4.0
   conventional-changelog-cli: 2.2.2
@@ -17,7 +17,7 @@ specifiers:
 
 dependencies:
   '@ffmpeg/core': 0.11.0
-  '@ffmpeg/ffmpeg': 0.11.2
+  '@ffmpeg/ffmpeg': 0.11.3
   axios: 0.27.2
   commander: 9.4.0
   lodash-es: 4.17.21
@@ -76,8 +76,8 @@ packages:
     resolution: {integrity: sha512-9Tt/+2PMpkGPXUK8n6He9G8Y+qR6qmCPSCw9iEKZxHHOvJ9BE/r0Fccj+YgDZTlyu6rXxc9x6EqCaFBIt7qzjA==}
     dev: false
 
-  /@ffmpeg/ffmpeg/0.11.2:
-    resolution: {integrity: sha512-g5vaVSkitEJI7WTPiG+8yyNXpNURTE+0fPhEAsdN1XL3bcWBPqi0KEFQ6prl+ZWDBw2HCY6T4NM4pzrOm92Z6A==}
+  /@ffmpeg/ffmpeg/0.11.3:
+    resolution: {integrity: sha512-VFihu1xI3l+zgRdoy3o56zk7ELt3RNPikSvTzRFRRRREUjr/a0RgfWxjNIH6TV3e5SSw1zdr/uewWWqghOPMaQ==}
     engines: {node: '>=12.16.1'}
     dependencies:
       is-url: 1.2.4
