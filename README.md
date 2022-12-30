@@ -20,6 +20,11 @@ npx bv2mp3 --naming=INDEX-TITLE-yousa-DATE --url=A --url=B
 
 Enjoy!
 
+# Local
+npm install
+
+node --no-experimental-fetch index.js --url=xxx
+
 ## License
 
 MIT
