@@ -73,16 +73,17 @@ export async function download(url, index) {
   const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(
     /\s/g,
     '-'
-  );
+  ).replace("/", "-");
   const date = new Date(videoData.ctime * 1000);
   const dateString = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate()}`;
-  const author = videoData.owner.name;
+  const author = videoData.owner.name.replace("/", "-");
   const filename = `${getName(index, title, author, dateString)}.flv`;
-  // console.log('aid:', aid);
-  // console.log('pid:', pid);
-  // console.log('cid:', cid);
+  
+  console.log('author:', author);
+  console.log('title:', title);
+  console.log('filename:', filename);
 
   const params = `appkey=iVGUTjsxvpLeuDCf&cid=${cid}&otype=json&qn=112&quality=112&type=`;
   const sign = createHash('md5')
