@@ -4,7 +4,7 @@ specifiers:
   '@ffmpeg/core': 0.11.0
   '@ffmpeg/ffmpeg': 0.11.6
   axios: 1.2.2
-  commander: 9.4.1
+  commander: 9.5.0
   conventional-changelog-cli: 2.2.2
   eslint: 8.31.0
   eslint-config-prettier: 8.6.0
@@ -19,7 +19,7 @@ dependencies:
   '@ffmpeg/core': 0.11.0
   '@ffmpeg/ffmpeg': 0.11.6
   axios: 1.2.2
-  commander: 9.4.1
+  commander: 9.5.0
   lodash-es: 4.17.21
   minimist: 1.2.7
   multi-progress: 4.0.0_progress@2.0.3
@@ -306,8 +306,8 @@ packages:
       delayed-stream: 1.0.0
     dev: false
 
-  /commander/9.4.1:
-    resolution: {integrity: sha512-5EEkTNyHNGFPD2H+c/dXXfQZYa/scCKasxWcXJaWnNJ99pnQN9Vnmqow+p+PlFPE63Q6mThaZws1T+HxfpgtPw==}
+  /commander/9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
     dev: false
 
