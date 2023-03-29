@@ -3,7 +3,7 @@ import { program, InvalidArgumentError } from 'commander';
 import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
 import { createRequire } from 'module';
-import { chunk } from 'lodash-es';
+import { sleep } from './src/utils.js';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
@@ -57,7 +57,7 @@ const argv = program.opts();
 
   for (let url of urls) {
     url = url.trim();
-    console.log(`fetching pages for ${url}`);
+    console.log(`Fetching pages for:`, url);
     const data = await getDataByUrl(url);
     // console.log(data);
     // console.log(`total threads: ${data.videoData.pages.length}`);
@@ -85,9 +85,19 @@ const argv = program.opts();
           (typeof argv.to === 'number' && index > argv.to)
         )
     );
+  // console.log('Pages:', pages);
 
-  const pageChunks = chunk(pages, argv.threads || 5);
-  for (const c of pageChunks) {
-    await Promise.all(c.map(download2mp3));
+  let maxThreads = argv.threads;
+  let currentThreads = 0;
+
+  for (const page of pages) {
+    while (currentThreads === maxThreads) {
+      // wait for available thread
+      await sleep(100);
+    }
+    currentThreads += 1;
+    download2mp3(page).finally(() => {
+      currentThreads -= 1;
+    });
   }
 })();
