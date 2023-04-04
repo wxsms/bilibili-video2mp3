@@ -8,14 +8,18 @@ import { resolve } from 'path';
 export async function download2mp3({ url, index }) {
   const argv = program.opts();
   const offsetIndex = (argv.indexOffset || 0) + index;
+  let b;
   try {
     const { filename, bar } = await download(url, offsetIndex);
+    b = bar;
     if (!argv.skipMp3) {
-      await flv2mp3(filename, bar);
+      bar.tick({ status: 'converting' });
+      await flv2mp3(filename);
       await fs.promises.unlink(filename);
     }
     bar.tick({ status: 'done' });
   } catch (err) {
+    b?.tick({ status: 'error' });
     if (argv.debug) {
       const logFile = resolve(process.cwd(), 'bilibili-video2mp3-error.log');
       await fs.promises.appendFile(

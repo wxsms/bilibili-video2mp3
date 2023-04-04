@@ -89,6 +89,7 @@ const argv = program.opts();
 
   let maxThreads = argv.threads;
   let currentThreads = 0;
+  let finished = 0;
 
   for (const page of pages) {
     while (currentThreads === maxThreads) {
@@ -98,6 +99,10 @@ const argv = program.opts();
     currentThreads += 1;
     download2mp3(page).finally(() => {
       currentThreads -= 1;
+      finished += 1;
+      if (finished === pages.length) {
+        process.exit(0);
+      }
     });
   }
 })();

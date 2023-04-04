@@ -1,42 +1,24 @@
-import { fetchFile, createFFmpeg } from '@ffmpeg/ffmpeg';
-import * as fs from 'fs';
-import { resolve } from 'path';
-import { uniqueId, noop } from 'lodash-es';
-import { sleep } from './utils.js';
+import { exec } from 'child_process';
+import { join } from 'path';
+import url from 'url';
+import path from 'path';
 
-let ffmpeg = createFFmpeg({ log: false });
-ffmpeg.load().then(noop);
-let isRunning = false;
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
-export async function flv2mp3(filename, bar) {
-  try {
-    while (!ffmpeg.isLoaded() || isRunning) {
-      bar.tick({ status: 'queueing' });
-      await sleep(1000);
-    }
-    bar.tick({ status: 'converting' });
-    isRunning = true;
-    const id = uniqueId();
-    const mp3 = filename.replace('.flv', '.mp3');
-    const memBefore = `${id}before.flv`;
-    const memAfter = `${id}after.mp3`;
-    ffmpeg.FS(
-      'writeFile',
-      memBefore,
-      await fetchFile(resolve(process.cwd(), filename))
+export function flv2mp3(filename) {
+  return new Promise((resolve, reject) => {
+    // because ffmpeg.wasm can only run one command a time,
+    // we use child process to run it concurrently
+    exec(
+      `node ${join(__dirname, '_flv2mp3.js')} "${filename}"`,
+      { cwd: process.cwd() },
+      (error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      }
     );
-    // ffmpeg -y -i ${filename} -q:a 0 ${mp3}
-    await ffmpeg.run('-y', '-i', memBefore, '-q:a', '0', memAfter);
-    await fs.promises.writeFile(
-      resolve(process.cwd(), mp3),
-      ffmpeg.FS('readFile', memAfter)
-    );
-    ffmpeg.FS('unlink', memBefore);
-    ffmpeg.FS('unlink', memAfter);
-  } catch (err) {
-    bar.tick({ status: 'error' });
-    throw err;
-  } finally {
-    isRunning = false;
-  }
+  });
 }
