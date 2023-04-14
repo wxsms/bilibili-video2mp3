@@ -20,8 +20,19 @@ function validateInt(value) {
 
 program
   .requiredOption(
-    '--url [urls...]',
-    `the video set (or single) url of bilibili.`
+    '-u, --url [urls...]',
+    `the video set (or single) url of bilibili, can input multiple urls.`
+  )
+  .option(
+    '-t, --threads <number>',
+    'how many download threads.',
+    validateInt,
+    10
+  )
+  .option(
+    '-n, --naming <string>',
+    `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
+    'TITLE-AUTHOR-DATE'
   )
   .option(
     '--from <number>',
@@ -29,16 +40,11 @@ program
     validateInt
   )
   .option('--to <number>', 'limit to page download to, 1-based.', validateInt)
-  .option('--threads <number>', 'how many download threads.', validateInt, 10)
-  .option(
-    '--naming <string>',
-    `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
-    'TITLE-AUTHOR-DATE'
-  )
   .option(
     '--index-offset <number>',
     'offset added to INDEX while saved.',
-    validateInt
+    validateInt,
+    0
   )
   .option(
     '--skip-mp3',
