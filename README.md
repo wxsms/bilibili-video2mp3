@@ -20,6 +20,10 @@ npx bv2mp3 --naming=INDEX-TITLE-yousa-DATE --url=A --url=B
 
 Enjoy!
 
+## Caveats
+
+If you are using Node.js v18+, the mp3 converting process may fail, see [this issue](https://github.com/wxsms/bilibili-video2mp3/issues/115).
+
 ## License
 
 MIT
