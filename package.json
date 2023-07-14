@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "conventional-changelog-cli": "2.2.2",
-    "eslint": "8.44.0",
+    "eslint": "8.45.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "prettier": "2.8.8"
