@@ -32,7 +32,7 @@
     "progress": "2.0.3"
   },
   "devDependencies": {
-    "conventional-changelog-cli": "3.0.0",
+    "conventional-changelog-cli": "4.0.0",
     "eslint": "8.48.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-prettier": "5.0.0",
