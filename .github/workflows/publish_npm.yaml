@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 'lts/*'
           registry-url: 'https://registry.npmjs.org'
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Publish NPM
         run: npm publish
         env:
