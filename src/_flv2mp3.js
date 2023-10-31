@@ -17,13 +17,13 @@ import { uniqueId } from 'lodash-es';
     ffmpeg.FS(
       'writeFile',
       memBefore,
-      await fetchFile(resolve(process.cwd(), filename))
+      await fetchFile(resolve(process.cwd(), filename)),
     );
     // ffmpeg -y -i ${filename} -q:a 0 ${mp3}
     await ffmpeg.run('-y', '-i', memBefore, '-q:a', '0', memAfter);
     await fs.promises.writeFile(
       resolve(process.cwd(), mp3),
-      ffmpeg.FS('readFile', memAfter)
+      ffmpeg.FS('readFile', memAfter),
     );
     ffmpeg.FS('unlink', memBefore);
     ffmpeg.FS('unlink', memAfter);

@@ -18,7 +18,7 @@ export function flv2mp3(filename) {
         } else {
           resolve();
         }
-      }
+      },
     );
   });
 }

@@ -24,7 +24,7 @@ export async function download2mp3({ url, index }) {
       const logFile = resolve(process.cwd(), 'bilibili-video2mp3-error.log');
       await fs.promises.appendFile(
         logFile,
-        `index: ${offsetIndex}\n` + `url: ${url}\n` + err.stack + '\n\n'
+        `index: ${offsetIndex}\n` + `url: ${url}\n` + err.stack + '\n\n',
       );
     }
     await sleep(2000);

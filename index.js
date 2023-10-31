@@ -21,35 +21,35 @@ function validateInt(value) {
 program
   .requiredOption(
     '-u, --url [urls...]',
-    `the video set (or single) url of bilibili, can input multiple urls.`
+    `the video set (or single) url of bilibili, can input multiple urls.`,
   )
   .option(
     '-t, --threads <number>',
     'how many download threads.',
     validateInt,
-    10
+    10,
   )
   .option(
     '-n, --naming <string>',
     `change the downloaded files' naming pattern. available: INDEX, TITLE, AUTHOR, DATE`,
-    'TITLE-AUTHOR-DATE'
+    'TITLE-AUTHOR-DATE',
   )
   .option(
     '--from <number>',
     'limit to page download from, 1-based.',
-    validateInt
+    validateInt,
   )
   .option('--to <number>', 'limit to page download to, 1-based.', validateInt)
   .option(
     '--index-offset <number>',
     'offset added to INDEX while saved.',
     validateInt,
-    0
+    0,
   )
   .option(
     '--skip-mp3',
     'skip the mp3 transform and keep downloaded file as video.',
-    false
+    false,
   )
   .option('--debug', 'enable debug log.', false);
 
@@ -89,7 +89,7 @@ const argv = program.opts();
         !(
           (typeof argv.from === 'number' && index < argv.from) ||
           (typeof argv.to === 'number' && index > argv.to)
-        )
+        ),
     );
   // console.log('Pages:', pages);
 
