@@ -6,8 +6,7 @@ import { uniqueId } from 'lodash-es';
 
 (async () => {
   let filename = process.argv[2];
-  let cutFrom = process.argv[3];
-  let cutTo = process.argv[4];
+  let ff = process.argv[3];
   // debuglog(`start: ${filename}`)
   let ffmpeg = createFFmpeg({ log: false });
   await ffmpeg.load();
@@ -23,11 +22,14 @@ import { uniqueId } from 'lodash-es';
     );
     // ffmpeg -y -i ${filename} -q:a 0 ${mp3}
     let ffArgs = ['-y'];
-    if (cutFrom) {
-      ffArgs = [...ffArgs, '-ss', cutFrom];
-    }
-    if (cutTo) {
-      ffArgs = [...ffArgs, '-to', cutTo];
+    if (ff) {
+      ffArgs = [
+        ...ffArgs,
+        ...ff
+          .split(' ')
+          .map((v) => v.trim())
+          .filter((v) => !!v),
+      ];
     }
     ffArgs = [...ffArgs, '-i', memBefore, '-q:a', '0', memAfter];
 

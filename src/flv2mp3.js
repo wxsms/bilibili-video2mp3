@@ -12,9 +12,7 @@ export function flv2mp3(filename) {
     // because ffmpeg.wasm can only run one command a time,
     // we use child process to run it concurrently
     exec(
-      `node ${join(__dirname, '_flv2mp3.js')} "${filename}" "${
-        argv.cutFrom
-      }" "${argv.cutTo}"`,
+      `node ${join(__dirname, '_flv2mp3.js')} "${filename}" "${argv.ffmpeg}"`,
       { cwd: process.cwd() },
       (error) => {
         if (error) {
