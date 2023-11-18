@@ -46,6 +46,8 @@ program
     validateInt,
     0,
   )
+  .option('--cut-from <string>', 'hh:mm:ss, applied to all', '')
+  .option('--cut-to <string>', 'hh:mm:ss, applied to all', '')
   .option(
     '--skip-mp3',
     'skip the mp3 transform and keep downloaded file as video.',
