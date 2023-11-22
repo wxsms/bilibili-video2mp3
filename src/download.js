@@ -72,7 +72,7 @@ export async function download(url, index) {
   const cid = pages[pid - 1].cid;
   const titleOld = (isSingle ? videoData.title : pages[pid - 1].part).replace(
     /\s/g,
-    '-'
+    '-',
   );
   const title = titleOld.replaceAll('/', '-');
 
