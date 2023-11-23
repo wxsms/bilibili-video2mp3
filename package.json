@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@ffmpeg/core": "0.12.4",
-    "@ffmpeg/ffmpeg": "0.11.6",
+    "@ffmpeg/ffmpeg": "0.12.7",
     "axios": "1.6.2",
     "commander": "11.1.0",
     "lodash-es": "4.17.21",
