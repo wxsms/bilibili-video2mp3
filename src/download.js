@@ -1,9 +1,7 @@
 import * as fs from 'fs';
-import { createHash } from 'crypto';
 import { getDataByUrl } from './getDataByUrl.js';
 import { createProgressBar } from './progress.js';
 import { getName } from './naming.js';
-import agent from './agent.js';
 import axios from 'axios';
 
 async function _download(url, title, filename, index) {
@@ -18,14 +16,12 @@ async function _download(url, title, filename, index) {
     // ignore
   }
   return new Promise((resolve, reject) => {
-    agent({
+    axios({
       url,
       method: 'GET',
       responseType: 'stream',
       headers: {
         Range: `bytes=${0}-`,
-        'User-Agent': 'PostmanRuntime/7.28.4',
-        Referer: 'https://www.bilibili.com/',
       },
     })
       .then(({ data, headers }) => {
@@ -84,15 +80,12 @@ export async function download(url, index) {
   // console.log('pid:', pid);
   // console.log('cid:', cid);
 
-  const params = `appkey=iVGUTjsxvpLeuDCf&cid=${cid}&otype=json&qn=112&quality=112&type=`;
-  const sign = createHash('md5')
-    .update(params + 'aHRmhWMLkdeMuILqORnYZocwMBpMEOdt')
-    .digest('hex');
-  const playUrl = `https://interface.bilibili.com/v2/playurl?${params}&sign=${sign}`;
+  const playUrl = `https://api.bilibili.com/x/player/playurl?fnval=80&cid=${cid}&bvid=${videoData.bvid}`;
+  // console.log(playUrl);
 
   const playResult = await axios.get(playUrl);
   // console.log(playResult);
-  const videoDownloadUrl = playResult.data.durl[0].url;
+  const videoDownloadUrl = playResult.data.data.dash.audio[0].baseUrl;
   // console.log(videoDownloadUrl);
   const bar = await _download(videoDownloadUrl, title, filename, index);
   return { filename, bar };

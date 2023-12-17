@@ -1,7 +1,7 @@
-import agent from './agent.js';
+import axios from 'axios';
 
 export async function getDataByUrl(url) {
-  const { data } = await agent.get(url);
+  const { data } = await axios.get(url);
   // console.log('--------data------------');
   // console.log(data);
   // console.log('--------------------');

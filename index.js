@@ -4,10 +4,18 @@ import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
 import { createRequire } from 'module';
 import { sleep } from './src/utils.js';
+import axios from 'axios';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 program.version(pkg.version);
+
+axios.defaults.headers = {
+  referer: 'https://www.bilibili.com/',
+  'user-agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+};
+axios.defaults.timeout = 0;
 
 function validateInt(value) {
   // parseInt takes a string and a radix

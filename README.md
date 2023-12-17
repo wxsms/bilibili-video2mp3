@@ -22,7 +22,9 @@ Enjoy!
 
 ## Caveats
 
-If you are using Node.js v18+, the mp3 converting process may fail, see [this issue](https://github.com/wxsms/bilibili-video2mp3/issues/115).
+We used to use [@ffmpeg/ffmpeg](https://github.com/ffmpegwasm/ffmpeg.wasm) for video converting, which does not require ffmpeg installed from operating system. However, it does not support Node.js 18+.
+
+Therefore, if you're using Node.js 18+, this lib will switch to os ffmpeg installation automatically, make sure it's in your path! visit [their website](https://ffmpeg.org/) for installation instruction.
 
 ## License
 
