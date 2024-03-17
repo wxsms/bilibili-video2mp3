@@ -15,8 +15,8 @@ dependencies:
     specifier: 1.6.8
     version: 1.6.8
   commander:
-    specifier: 11.1.0
-    version: 11.1.0
+    specifier: 12.0.0
+    version: 12.0.0
   lodash-es:
     specifier: 4.17.21
     version: 4.17.21
@@ -358,9 +358,9 @@ packages:
       delayed-stream: 1.0.0
     dev: false
 
-  /commander@11.1.0:
-    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
-    engines: {node: '>=16'}
+  /commander@12.0.0:
+    resolution: {integrity: sha512-MwVNWlYjDTtOjX5PiD7o5pK0UrFU/OYgcJfjjK4RaHZETNtjJqrZa9Y9ds88+A+f+d5lv+561eZ+yCKoS3gbAA==}
+    engines: {node: '>=18'}
     dev: false
 
   /compare-func@2.0.0:
