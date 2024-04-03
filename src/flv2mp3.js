@@ -12,14 +12,22 @@ export function flv2mp3(filename) {
   if (nodeVersion >= 18) {
     const mp3 = filename.replace('.flv', '.mp3');
     return new Promise((resolve, reject) => {
-      exec(`ffmpeg -y -i "${filename}" -q:a 0 "${mp3}"`, (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          // console.log(`${mp3} converted`);
-          resolve();
-        }
-      });
+      const argv = program.opts();
+      exec(
+        `ffmpeg -y ${argv.ffmpeg
+          .split(' ')
+          .map((v) => v.trim())
+          .filter((v) => !!v)
+          .join(' ')} -i "${filename}" -q:a 0 "${mp3}"`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            // console.log(`${mp3} converted`);
+            resolve();
+          }
+        },
+      );
     });
   }
   return new Promise((resolve, reject) => {
