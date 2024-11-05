@@ -26,6 +26,7 @@
     "@ffmpeg/ffmpeg": "0.11.6",
     "axios": "1.7.7",
     "commander": "11.1.0",
+    "filenamify": "^6.0.0",
     "lodash-es": "4.17.21",
     "minimist": "1.2.8",
     "multi-progress": "4.0.0",

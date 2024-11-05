@@ -3,6 +3,7 @@ import { getDataByUrl } from './getDataByUrl.js';
 import { createProgressBar } from './progress.js';
 import { getName } from './naming.js';
 import axios from 'axios';
+import filenamify from 'filenamify';
 
 async function _download(url, title, filename, index) {
   // console.log('download', url)
@@ -75,7 +76,9 @@ export async function download(url, index) {
     date.getMonth() + 1
   }-${date.getDate()}`;
   const author = videoData.owner.name;
-  const filename = `${getName(index, title, author, dateString)}.flv`;
+  const filename = filenamify(
+    `${getName(index, title, author, dateString)}.flv`,
+  );
   // console.log('aid:', aid);
   // console.log('pid:', pid);
   // console.log('cid:', cid);
