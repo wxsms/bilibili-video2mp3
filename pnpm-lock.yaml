@@ -18,7 +18,7 @@ dependencies:
     specifier: 11.1.0
     version: 11.1.0
   filenamify:
-    specifier: ^6.0.0
+    specifier: 6.0.0
     version: 6.0.0
   lodash-es:
     specifier: 4.17.21
