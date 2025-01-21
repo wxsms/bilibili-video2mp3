@@ -15,8 +15,8 @@ dependencies:
     specifier: 1.7.9
     version: 1.7.9
   commander:
-    specifier: 11.1.0
-    version: 11.1.0
+    specifier: 13.1.0
+    version: 13.1.0
   filenamify:
     specifier: 6.0.0
     version: 6.0.0
@@ -291,9 +291,9 @@ packages:
       delayed-stream: 1.0.0
     dev: false
 
-  /commander@11.1.0:
-    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
-    engines: {node: '>=16'}
+  /commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
+    engines: {node: '>=18'}
     dev: false
 
   /compare-func@2.0.0:
