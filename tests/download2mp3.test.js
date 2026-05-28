@@ -128,7 +128,7 @@ describe('download2mp3', () => {
     expect(download).toHaveBeenNthCalledWith(2, 'https://test.com?p=1', 1);
   });
 
-  it('should sleep 2s before retrying on failure', async () => {
+  it('should sleep with backoff before retrying on failure', async () => {
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail'))
       .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
@@ -138,6 +138,29 @@ describe('download2mp3', () => {
 
     const { sleep } = await import('../src/utils.js');
     expect(sleep).toHaveBeenCalledWith(2000);
+  });
+
+  it('should increase sleep delay on subsequent retries', async () => {
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('fail1'))
+      .mockRejectedValueOnce(new Error('fail2'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    const { sleep } = await import('../src/utils.js');
+    expect(sleep).toHaveBeenNthCalledWith(1, 2000);
+    expect(sleep).toHaveBeenNthCalledWith(2, 4000);
+  });
+
+  it('should throw after exceeding max retries', async () => {
+    vi.mocked(download).mockRejectedValue(new Error('permanent fail'));
+
+    await expect(
+      download2mp3({ url: 'https://test.com?p=1', index: 1 }),
+    ).rejects.toThrow('permanent fail');
+    expect(download).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
   });
 
   it('should not tick bar with "error" when bar is not yet available', async () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
 
 vi.mock('child_process', () => ({
-  exec: vi.fn(),
+  execFile: vi.fn(),
 }));
 
 vi.mock('commander', () => ({
@@ -10,14 +10,14 @@ vi.mock('commander', () => ({
   },
 }));
 
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 import { flv2mp3 } from '../src/flv2mp3.js';
 
 describe('flv2mp3', () => {
   const originalVersion = process.versions.node;
 
   afterEach(() => {
-    vi.mocked(exec).mockReset();
+    vi.mocked(execFile).mockReset();
   });
 
   describe('node >= 18', () => {
@@ -29,27 +29,30 @@ describe('flv2mp3', () => {
     });
 
     it('should call ffmpeg with correct arguments', async () => {
-      vi.mocked(exec).mockImplementation((cmd, cb) => cb(null));
+      vi.mocked(execFile).mockImplementation((cmd, args, cb) => cb(null));
       await flv2mp3('test.flv');
-      expect(exec).toHaveBeenCalledTimes(1);
-      const cmd = vi.mocked(exec).mock.calls[0][0];
-      expect(cmd).toContain('ffmpeg');
-      expect(cmd).toContain('-i "test.flv"');
-      expect(cmd).toContain('"test.mp3"');
-      expect(cmd).toContain('-q:a 0');
+      expect(execFile).toHaveBeenCalledTimes(1);
+      const [cmd, args] = vi.mocked(execFile).mock.calls[0];
+      expect(cmd).toBe('ffmpeg');
+      expect(args).toContain('-y');
+      expect(args).toContain('-i');
+      expect(args).toContain('test.flv');
+      expect(args).toContain('-q:a');
+      expect(args).toContain('0');
+      expect(args).toContain('test.mp3');
     });
 
     it('should include extra ffmpeg options from argv', async () => {
-      vi.mocked(exec).mockImplementation((cmd, cb) => cb(null));
+      vi.mocked(execFile).mockImplementation((cmd, args, cb) => cb(null));
       await flv2mp3('test.flv');
-      const cmd = vi.mocked(exec).mock.calls[0][0];
-      expect(cmd).toContain('-vn');
-      expect(cmd).toContain('-ar');
-      expect(cmd).toContain('44100');
+      const args = vi.mocked(execFile).mock.calls[0][1];
+      expect(args).toContain('-vn');
+      expect(args).toContain('-ar');
+      expect(args).toContain('44100');
     });
 
     it('should reject on ffmpeg error', async () => {
-      vi.mocked(exec).mockImplementation((cmd, cb) => cb(new Error('ffmpeg failed')));
+      vi.mocked(execFile).mockImplementation((cmd, args, cb) => cb(new Error('ffmpeg failed')));
       await expect(flv2mp3('test.flv')).rejects.toThrow('ffmpeg failed');
     });
   });
@@ -63,16 +66,17 @@ describe('flv2mp3', () => {
     });
 
     it('should spawn _flv2mp3.js child process', async () => {
-      vi.mocked(exec).mockImplementation((cmd, opts, cb) => cb(null));
+      vi.mocked(execFile).mockImplementation((cmd, args, opts, cb) => cb(null));
       await flv2mp3('test.flv');
-      expect(exec).toHaveBeenCalledTimes(1);
-      const cmd = vi.mocked(exec).mock.calls[0][0];
-      expect(cmd).toContain('_flv2mp3.js');
-      expect(cmd).toContain('"test.flv"');
+      expect(execFile).toHaveBeenCalledTimes(1);
+      const [cmd, args] = vi.mocked(execFile).mock.calls[0];
+      expect(cmd).toBe('node');
+      expect(args[0]).toContain('_flv2mp3.js');
+      expect(args).toContain('test.flv');
     });
 
     it('should reject on child process error', async () => {
-      vi.mocked(exec).mockImplementation((cmd, opts, cb) => cb(new Error('child failed')));
+      vi.mocked(execFile).mockImplementation((cmd, args, opts, cb) => cb(new Error('child failed')));
       await expect(flv2mp3('test.flv')).rejects.toThrow('child failed');
     });
   });

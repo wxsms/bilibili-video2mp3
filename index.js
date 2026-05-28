@@ -104,12 +104,21 @@ const argv = program.opts();
       await sleep(100);
     }
     currentThreads += 1;
-    download2mp3(page).finally(() => {
-      currentThreads -= 1;
-      finished += 1;
-      if (finished === pages.length) {
-        process.exit(0);
-      }
-    });
+    download2mp3(page)
+      .then(() => {
+        currentThreads -= 1;
+        finished += 1;
+        if (finished === pages.length) {
+          process.exit(0);
+        }
+      })
+      .catch((err) => {
+        currentThreads -= 1;
+        finished += 1;
+        console.error(`Failed after retries: ${page.url}`, err.message);
+        if (finished === pages.length) {
+          process.exit(1);
+        }
+      });
   }
 })();

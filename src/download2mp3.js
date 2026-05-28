@@ -5,7 +5,9 @@ import { program } from 'commander';
 import { sleep } from './utils.js';
 import { resolve } from 'path';
 
-export async function download2mp3({ url, index }) {
+const MAX_RETRY = 3;
+
+export async function download2mp3({ url, index }, retryCount = 0) {
   const argv = program.opts();
   const offsetIndex = (argv.indexOffset || 0) + index;
   let b;
@@ -33,7 +35,10 @@ stack: ${err.stack}
 `,
       );
     }
-    await sleep(2000);
-    await download2mp3({ url, index });
+    if (retryCount >= MAX_RETRY) {
+      throw err;
+    }
+    await sleep(2000 * (retryCount + 1));
+    await download2mp3({ url, index }, retryCount + 1);
   }
 }
