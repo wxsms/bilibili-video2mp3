@@ -140,16 +140,18 @@ describe('download2mp3', () => {
     expect(sleep).toHaveBeenCalledWith(2000);
   });
 
-  it('should tick bar with "error" status on failure when bar exists', async () => {
+  it('should not tick bar with "error" when bar is not yet available', async () => {
+    // First call fails before bar is assigned, so b?.tick should be a no-op
+    const localBar = { tick: vi.fn() };
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: localBar });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({ url: 'https://test.com?p=1', index: 1 });
 
-    // First call fails — no bar available, so no error tick on first attempt
-    // But the retry succeeds with bar
+    // localBar only received calls from the successful retry, no error tick
+    expect(localBar.tick).not.toHaveBeenCalledWith({ status: 'error' });
   });
 
   it('should write debug log when debug is enabled and error occurs', async () => {

@@ -235,26 +235,40 @@ describe('download', () => {
     const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
     expect(statusCalls.length).toBeLessThanOrEqual(2); // at most initial tick + error status
   });
-});
 
-describe('download title derivation', () => {
-  it('uses videoData.title for single-page videos', () => {
-    const pages = [{ cid: 100, part: 'Only Part' }];
-    const videoData = { title: 'Main Title', pages };
-    const isSingle = pages.length === 1;
-    const pid = 1;
-    const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(/\s/g, '-');
-    expect(title).toBe('Main-Title');
+  it('should use videoData.title for single-page videos', async () => {
+    const singlePageData = {
+      videoData: {
+        ...mockVideoData.videoData,
+        title: 'Single Video Title',
+        pages: [{ cid: 100, part: 'Only Part' }],
+      },
+      p: 1,
+    };
+    vi.mocked(getDataByUrl).mockResolvedValue(singlePageData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+    mockStreamDownload();
+
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+
+    // getName is called with the video title, not page part
+    const [, title] = getName.mock.calls[0];
+    expect(title).toBe('Single-Video-Title');
   });
 
-  it('uses page part name for multi-page videos', () => {
-    const pages = [
-      { cid: 100, part: 'First Episode' },
-      { cid: 200, part: 'Second Episode' },
-    ];
-    const isSingle = pages.length === 1;
-    const pid = 2;
-    const title = (isSingle ? 'Main' : pages[pid - 1].part).replace(/\s/g, '-');
-    expect(title).toBe('Second-Episode');
+  it('should use page part name for multi-page videos', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+    mockStreamDownload();
+
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+
+    // mockVideoData has p:1 and pages[0].part = 'Part 1' -> 'Part-1'
+    const [, title] = getName.mock.calls[0];
+    expect(title).toBe('Part-1');
   });
 });

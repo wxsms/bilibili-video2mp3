@@ -1,15 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { InvalidArgumentError } from 'commander';
-
-// Replicate validateInt from index.js (it's not exported, and
-// importing index.js triggers CLI side effects)
-function validateInt(value) {
-  const parsedValue = parseInt(value, 10);
-  if (isNaN(parsedValue)) {
-    throw new InvalidArgumentError('Not a number.');
-  }
-  return parsedValue;
-}
+import { validateInt } from '../src/validateInt.js';
 
 describe('validateInt', () => {
   it('should parse a valid integer string', () => {
