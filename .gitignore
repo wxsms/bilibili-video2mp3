@@ -3,3 +3,4 @@ node_modules
 *.flv
 *.mp3
 *.log
+coverage
