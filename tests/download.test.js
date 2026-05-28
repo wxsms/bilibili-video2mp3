@@ -43,6 +43,7 @@ import axios from 'axios';
 import { getDataByUrl } from '../src/getDataByUrl.js';
 import { getName } from '../src/naming.js';
 import { createProgressBar } from '../src/progress.js';
+import * as fs from 'fs';
 import { download } from '../src/download.js';
 
 function mockStreamDownload(contentLength = 1024) {
@@ -80,6 +81,8 @@ describe('download', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default: stat rejects (file doesn't exist)
+    fs.promises.stat.mockRejectedValue(new Error('not found'));
   });
 
   it('should call getDataByUrl with the given url', async () => {
@@ -147,6 +150,90 @@ describe('download', () => {
 
     await download('https://www.bilibili.com/video/BV1test?p=1', 2);
     expect(createProgressBar).toHaveBeenCalledWith(2, 'Part-1', 2048);
+  });
+
+  it('should unlink existing file before download', async () => {
+    // Simulate file already exists: stat succeeds, then unlink is called
+    fs.promises.stat.mockResolvedValueOnce(undefined);
+    fs.promises.unlink.mockResolvedValueOnce(undefined);
+
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+    mockStreamDownload();
+
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    expect(fs.promises.unlink).toHaveBeenCalled();
+  });
+
+  it('should reject on stream error', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+
+    const mockStream = new EventEmitter();
+    mockStream.pipe = vi.fn((ws) => {
+      setTimeout(() => {
+        mockStream.emit('data', Buffer.alloc(512));
+        mockStream.emit('error', new Error('network broken'));
+      }, 0);
+      return ws;
+    });
+    axios.mockResolvedValueOnce({
+      data: mockStream,
+      headers: { 'content-length': '1024' },
+    });
+
+    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('network broken');
+  });
+
+  it('should reject on axios request failure', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+    axios.mockRejectedValueOnce(new Error('request failed'));
+
+    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('request failed');
+  });
+
+  it('should ignore data events after stream failure', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+
+    const mockBar = { tick: vi.fn() };
+    vi.mocked(createProgressBar).mockReturnValueOnce(mockBar);
+
+    const mockStream = new EventEmitter();
+    mockStream.pipe = vi.fn((ws) => {
+      setTimeout(() => {
+        mockStream.emit('error', new Error('stream error'));
+        // data after error should be ignored (failed = true guard)
+        mockStream.emit('data', Buffer.alloc(100));
+        mockStream.emit('end');
+      }, 0);
+      return ws;
+    });
+    axios.mockResolvedValueOnce({
+      data: mockStream,
+      headers: { 'content-length': '1024' },
+    });
+
+    try {
+      await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    } catch (e) {
+      // expected
+    }
+
+    // bar.tick should have been called for error (tick total), but NOT for post-error data/end
+    const tickCalls = mockBar.tick.mock.calls.map((c) => c[0]);
+    // Should not have a 'done' or 'downloading' status after error
+    const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
+    expect(statusCalls.length).toBeLessThanOrEqual(2); // at most initial tick + error status
   });
 });
 

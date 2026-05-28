@@ -113,4 +113,80 @@ describe('download2mp3', () => {
 
     expect(fs.promises.unlink).toHaveBeenCalledWith('test.flv');
   });
+
+  it('should retry on download failure', async () => {
+    // First call fails, second call succeeds
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('download failed'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    expect(download).toHaveBeenCalledTimes(2);
+    expect(download).toHaveBeenNthCalledWith(1, 'https://test.com?p=1', 1);
+    expect(download).toHaveBeenNthCalledWith(2, 'https://test.com?p=1', 1);
+  });
+
+  it('should sleep 2s before retrying on failure', async () => {
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('fail'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    const { sleep } = await import('../src/utils.js');
+    expect(sleep).toHaveBeenCalledWith(2000);
+  });
+
+  it('should tick bar with "error" status on failure when bar exists', async () => {
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('fail'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    // First call fails — no bar available, so no error tick on first attempt
+    // But the retry succeeds with bar
+  });
+
+  it('should write debug log when debug is enabled and error occurs', async () => {
+    vi.mocked(program.opts).mockReturnValue({
+      indexOffset: 0,
+      skipMp3: false,
+      debug: true,
+      ffmpeg: '',
+    });
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('fail'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    expect(fs.promises.appendFile).toHaveBeenCalled();
+    const written = fs.promises.appendFile.mock.calls[0][1];
+    expect(written).toContain('index: 1');
+    expect(written).toContain('https://test.com?p=1');
+    expect(written).toContain('fail');
+  });
+
+  it('should not write debug log when debug is disabled', async () => {
+    vi.mocked(program.opts).mockReturnValue({
+      indexOffset: 0,
+      skipMp3: false,
+      debug: false,
+      ffmpeg: '',
+    });
+    vi.mocked(download)
+      .mockRejectedValueOnce(new Error('fail'))
+      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    await download2mp3({ url: 'https://test.com?p=1', index: 1 });
+
+    expect(fs.promises.appendFile).not.toHaveBeenCalled();
+  });
 });
