@@ -4,3 +4,4 @@ node_modules
 *.mp3
 *.log
 coverage
+e2e-output

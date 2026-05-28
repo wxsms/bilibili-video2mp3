@@ -20,7 +20,8 @@
   "scripts": {
     "lint": "npx eslint . --fix",
     "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0",
-    "test": "vitest run"
+    "test": "vitest run --exclude tests/e2e.test.js",
+"test:e2e": "vitest run tests/e2e.test.js"
   },
   "dependencies": {
     "@ffmpeg/core": "0.11.0",
