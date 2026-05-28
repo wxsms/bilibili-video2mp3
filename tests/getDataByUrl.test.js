@@ -34,7 +34,9 @@ describe('getDataByUrl', () => {
 
   it('should throw if __INITIAL_STATE__ is not found', async () => {
     axios.get.mockResolvedValue({ data: '<html>no state here</html>' });
-    await expect(getDataByUrl('https://www.bilibili.com/video/BV1xx411c7mD')).rejects.toThrow();
+    await expect(getDataByUrl('https://www.bilibili.com/video/BV1xx411c7mD')).rejects.toThrow(
+      'Failed to extract __INITIAL_STATE__ from page',
+    );
   });
 
   it('should handle state with special characters in title', async () => {

@@ -48,4 +48,12 @@ describe('getName', () => {
     const result = getName(1, '', '', '');
     expect(result).toBe('');
   });
+
+  it('should not double-replace when a value contains a placeholder keyword', () => {
+    namingPattern = 'INDEX-TITLE';
+    // If TITLE is "INDEX-3", sequential .replace would turn "INDEX-INDEX-3" into "3-3"
+    // Single-pass replacement should produce "3-INDEX-3"
+    const result = getName(3, 'INDEX-3', 'Author', '2024-01-01');
+    expect(result).toBe('3-INDEX-3');
+  });
 });
