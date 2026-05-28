@@ -37,18 +37,23 @@ async function _download(url, title, filename, index) {
           }
           bar.tick(chunk.length, { status: 'downloading' });
         });
-        data.on('end', () => {
+        writeStream.on('finish', () => {
           if (failed) {
             return;
           }
-          writeStream.close();
           resolve(bar);
+        });
+        writeStream.on('error', (err) => {
+          failed = true;
+          bar.tick(total);
+          bar.tick({ status: 'error' });
+          reject(err);
         });
         data.on('error', (err) => {
           failed = true;
           bar.tick(total);
           bar.tick({ status: 'error' });
-          writeStream.close();
+          writeStream.destroy();
           reject(err);
         });
       })

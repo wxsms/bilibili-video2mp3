@@ -30,13 +30,21 @@ vi.mock('fs', () => ({
       stat: vi.fn().mockRejectedValue(new Error('not found')),
       unlink: vi.fn(),
     },
-    createWriteStream: vi.fn(() => ({ close: vi.fn() })),
+    createWriteStream: vi.fn(() => {
+      const ws = new EventEmitter();
+      ws.destroy = vi.fn();
+      return ws;
+    }),
   },
   promises: {
     stat: vi.fn().mockRejectedValue(new Error('not found')),
     unlink: vi.fn(),
   },
-  createWriteStream: vi.fn(() => ({ close: vi.fn() })),
+  createWriteStream: vi.fn(() => {
+    const ws = new EventEmitter();
+    ws.destroy = vi.fn();
+    return ws;
+  }),
 }));
 
 import axios from 'axios';
@@ -53,6 +61,8 @@ function mockStreamDownload(contentLength = 1024) {
       mockStream.emit('data', Buffer.alloc(512));
       mockStream.emit('data', Buffer.alloc(contentLength - 512));
       mockStream.emit('end');
+      // pipe triggers 'finish' on writeStream after source 'end'
+      ws.emit('finish');
     }, 0);
     return ws;
   });
@@ -83,6 +93,17 @@ describe('download', () => {
     vi.clearAllMocks();
     // Default: stat rejects (file doesn't exist)
     fs.promises.stat.mockRejectedValue(new Error('not found'));
+    // Restore createWriteStream implementation after clearAllMocks resets it
+    fs.default.createWriteStream.mockImplementation(() => {
+      const ws = new EventEmitter();
+      ws.destroy = vi.fn();
+      return ws;
+    });
+    fs.createWriteStream.mockImplementation(() => {
+      const ws = new EventEmitter();
+      ws.destroy = vi.fn();
+      return ws;
+    });
   });
 
   it('should call getDataByUrl with the given url', async () => {
@@ -234,6 +255,76 @@ describe('download', () => {
     // Should not have a 'done' or 'downloading' status after error
     const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
     expect(statusCalls.length).toBeLessThanOrEqual(2); // at most initial tick + error status
+  });
+
+  it('should reject on writeStream error', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+
+    // Override createWriteStream to emit 'error'
+    fs.default.createWriteStream.mockImplementation(() => {
+      const ws = new EventEmitter();
+      ws.destroy = vi.fn();
+      ws.pipe = vi.fn();
+      setTimeout(() => {
+        ws.emit('error', new Error('disk full'));
+      }, 0);
+      return ws;
+    });
+    fs.createWriteStream.mockImplementation(() => {
+      const ws = new EventEmitter();
+      ws.destroy = vi.fn();
+      ws.pipe = vi.fn();
+      setTimeout(() => {
+        ws.emit('error', new Error('disk full'));
+      }, 0);
+      return ws;
+    });
+
+    const mockStream = new EventEmitter();
+    mockStream.pipe = vi.fn((ws) => ws);
+    axios.mockResolvedValueOnce({
+      data: mockStream,
+      headers: { 'content-length': '1024' },
+    });
+
+    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('disk full');
+  });
+
+  it('should ignore finish event after stream error', async () => {
+    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
+    axios.get.mockResolvedValue({
+      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+    });
+
+    const mockBar = { tick: vi.fn() };
+    vi.mocked(createProgressBar).mockReturnValueOnce(mockBar);
+
+    const mockStream = new EventEmitter();
+    mockStream.pipe = vi.fn((ws) => {
+      setTimeout(() => {
+        mockStream.emit('error', new Error('stream error'));
+        // finish after error should be ignored (failed = true guard)
+        ws.emit('finish');
+      }, 0);
+      return ws;
+    });
+    axios.mockResolvedValueOnce({
+      data: mockStream,
+      headers: { 'content-length': '1024' },
+    });
+
+    try {
+      await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    } catch (e) {
+      // expected
+    }
+
+    // Should not have resolved successfully, so no 'done' status tick
+    const doneTicks = mockBar.tick.mock.calls.filter((c) => c[1] && c[1].status === 'done');
+    expect(doneTicks.length).toBe(0);
   });
 
   it('should use videoData.title for single-page videos', async () => {
