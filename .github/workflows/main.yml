@@ -22,6 +22,24 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm test
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: pnpm audit --audit-level moderate
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: node index.js --help
   coverage:
     runs-on: ubuntu-latest
     steps:
