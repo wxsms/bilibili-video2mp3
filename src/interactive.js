@@ -10,22 +10,40 @@ const pkg = require('../package.json');
 export async function interactive() {
   p.intro(`bv2mp3 v${pkg.version}`);
 
-  // Step 1: Input URLs
-  const urlInput = await p.text({
-    message: '请输入 bilibili 视频 URL（多个用逗号分隔）',
+  // Step 1: Input URLs (one per prompt, empty to finish)
+  const BILIBILI_URL_RE = /^https?:\/\/(www\.)?bilibili\.com\/video\//;
+  const urls = [];
+
+  const firstUrl = await p.text({
+    message: '请输入想要下载的 bilibili 视频链接',
     placeholder: 'https://www.bilibili.com/video/BV...',
+    validate: (v) => {
+      if (!v?.trim()) return '请输入一个有效的 bilibili 视频 URL';
+      if (!BILIBILI_URL_RE.test(v.trim()))
+        return 'URL 格式不正确，需为 bilibili.com/video/ 链接';
+    },
   });
-  if (p.isCancel(urlInput)) {
+  if (p.isCancel(firstUrl)) {
     p.cancel('已取消');
     process.exit(0);
   }
-  const urls = urlInput
-    .split(/[,，\s]+/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-  if (urls.length === 0) {
-    p.cancel('未输入有效 URL');
-    process.exit(1);
+  urls.push(firstUrl.trim());
+
+  while (true) {
+    const nextUrl = await p.text({
+      message: '可以输入更多视频链接，或直接回车结束',
+      placeholder: '回车结束',
+      validate: (v) => {
+        if (v?.trim() && !BILIBILI_URL_RE.test(v.trim()))
+          return 'URL 格式不正确，需为 bilibili.com/video/ 链接';
+      },
+    });
+    if (p.isCancel(nextUrl)) {
+      p.cancel('已取消');
+      process.exit(0);
+    }
+    if (!nextUrl.trim()) break;
+    urls.push(nextUrl.trim());
   }
 
   // Step 2: Fetch video info
