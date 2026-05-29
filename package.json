@@ -18,7 +18,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "lint": "npx eslint . --fix",
+    "lint": "eslint . --fix",
     "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0"
   },
   "dependencies": {
