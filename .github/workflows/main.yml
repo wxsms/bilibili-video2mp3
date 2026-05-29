@@ -33,9 +33,16 @@ jobs:
       - run: pnpm test -- --coverage
       - name: Generate coverage badge
         run: |
-          COVERAGE=$(cat coverage/coverage-summary.json | node -e "
-            const data = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
-            const pct = data.total.lines.pct;
+          COVERAGE=$(node -e "
+            const data = JSON.parse(require('fs').readFileSync('coverage/coverage-final.json','utf8'));
+            let total=0, covered=0;
+            for (const f of Object.values(data)) {
+              for (const [n, c] of Object.entries(f.s)) {
+                total++;
+                if (c > 0) covered++;
+              }
+            }
+            const pct = total ? Math.round(covered / total * 1000) / 10 : 0;
             const color = pct >= 90 ? 'brightgreen' : pct >= 70 ? 'yellow' : 'red';
             process.stdout.write(JSON.stringify({schemaVersion:1,label:'coverage',message:pct+'%',color}));
           ")
