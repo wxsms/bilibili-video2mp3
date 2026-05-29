@@ -29,7 +29,7 @@
   "dependencies": {
     "@ffmpeg/core": "0.12.10",
     "@ffmpeg/ffmpeg": "0.12.15",
-    "axios": "1.15.2",
+    "axios": "1.16.1",
     "commander": "14.0.3",
     "filenamify": "7.0.1",
     "lodash-es": "4.18.1",
