@@ -42,7 +42,7 @@ import { uniqueId } from 'lodash-es';
     ffmpeg.FS('unlink', memAfter);
     // debuglog(`done: ${filename}`);
     process.exit(0);
-  } catch (err) {
+  } catch {
     // debuglog(`error: ${filename}`);
     // debuglog(err);
     process.exit(1);

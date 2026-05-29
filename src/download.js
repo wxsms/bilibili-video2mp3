@@ -13,7 +13,7 @@ async function _download(url, title, filename, index) {
     // startByte = stat.size + 1;
     await fs.promises.stat(filename);
     await fs.promises.unlink(filename);
-  } catch (err) {
+  } catch {
     // ignore
   }
   return new Promise((resolve, reject) => {

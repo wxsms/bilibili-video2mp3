@@ -34,36 +34,11 @@
   },
   "devDependencies": {
     "conventional-changelog-cli": "5.0.0",
-    "eslint": "8.57.1",
+    "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
-    "prettier": "3.8.3"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2020,
-      "sourceType": "module"
-    },
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "semi": true,
-          "singleQuote": true,
-          "endOfLine": "auto"
-        }
-      ]
-    }
+    "prettier": "3.8.3",
+    "@eslint/js": "^9.0.0",
+    "globals": "^16.0.0"
   }
 }
