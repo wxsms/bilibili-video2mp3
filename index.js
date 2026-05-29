@@ -56,7 +56,6 @@ program
 
 program.parse(process.argv);
 const argv = program.opts();
-// console.log(argv);
 
 (async function () {
   const urls = typeof argv.url === 'string' ? [argv.url] : argv.url;
@@ -66,8 +65,6 @@ const argv = program.opts();
     url = url.trim();
     console.log(`Fetching pages for:`, url);
     const data = await getDataByUrl(url);
-    // console.log(data);
-    // console.log(`total threads: ${data.videoData.pages.length}`);
     pages = [
       ...pages,
       ...data.videoData.pages.map((value, index) => {
@@ -92,7 +89,6 @@ const argv = program.opts();
           (typeof argv.to === 'number' && index > argv.to)
         ),
     );
-  // console.log('Pages:', pages);
 
   let maxThreads = argv.threads;
   let currentThreads = 0;
@@ -100,11 +96,18 @@ const argv = program.opts();
 
   for (const page of pages) {
     while (currentThreads === maxThreads) {
-      // wait for available thread
       await sleep(100);
     }
     currentThreads += 1;
-    download2mp3(page)
+    download2mp3({
+      url: page.url,
+      index: page.index,
+      naming: argv.naming,
+      ffmpeg: argv.ffmpeg,
+      skipMp3: argv.skipMp3,
+      debug: argv.debug,
+      indexOffset: argv.indexOffset,
+    })
       .then(() => {
         currentThreads -= 1;
         finished += 1;

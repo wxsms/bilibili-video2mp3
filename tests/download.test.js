@@ -54,6 +54,8 @@ import { createProgressBar } from '../src/progress.js';
 import * as fs from 'fs';
 import { download } from '../src/download.js';
 
+const defaultNaming = 'TITLE-AUTHOR-DATE';
+
 function mockStreamDownload(contentLength = 1024) {
   const mockStream = new EventEmitter();
   mockStream.pipe = vi.fn((ws) => {
@@ -115,13 +117,15 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+      naming: defaultNaming,
+    });
     expect(getDataByUrl).toHaveBeenCalledWith(
       'https://www.bilibili.com/video/BV1test?p=1',
     );
   });
 
-  it('should call getName with index and derived metadata', async () => {
+  it('should call getName with index, derived metadata, and naming', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
       data: {
@@ -130,16 +134,19 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 3);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 3, {
+      naming: 'INDEX-TITLE',
+    });
 
-    // getName(index, title, author, dateString)
+    // getName(index, title, author, dateString, naming)
     expect(getName).toHaveBeenCalledTimes(1);
-    const [index, title, author, dateStr] = getName.mock.calls[0];
+    const [index, title, author, dateStr, naming] = getName.mock.calls[0];
     expect(index).toBe(3);
     // Multi-page: title = pages[p-1].part with spaces replaced by -
     expect(title).toBe('Part-1');
     expect(author).toBe('TestAuthor');
     expect(dateStr).toMatch(/^\d{4}-\d{1,2}-\d{1,2}$/);
+    expect(naming).toBe('INDEX-TITLE');
   });
 
   it('should fetch playurl API with correct cid and bvid', async () => {
@@ -151,7 +158,9 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+      naming: defaultNaming,
+    });
 
     expect(axios.get).toHaveBeenCalledWith(
       'https://api.bilibili.com/x/player/playurl?fnval=80&cid=100&bvid=BV1test',
@@ -170,6 +179,7 @@ describe('download', () => {
     const result = await download(
       'https://www.bilibili.com/video/BV1test?p=1',
       1,
+      { naming: defaultNaming },
     );
     expect(result.filename).toBe('TestFile.flv');
     expect(result.bar).toBeDefined();
@@ -184,7 +194,9 @@ describe('download', () => {
     });
     mockStreamDownload(2048);
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 2);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 2, {
+      naming: defaultNaming,
+    });
     expect(createProgressBar).toHaveBeenCalledWith(2, 'Part-1', 2048);
   });
 
@@ -201,7 +213,9 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+      naming: defaultNaming,
+    });
     expect(fs.promises.unlink).toHaveBeenCalled();
   });
 
@@ -227,7 +241,9 @@ describe('download', () => {
     });
 
     await expect(
-      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+      download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+        naming: defaultNaming,
+      }),
     ).rejects.toThrow('network broken');
   });
 
@@ -241,7 +257,9 @@ describe('download', () => {
     axios.mockRejectedValueOnce(new Error('request failed'));
 
     await expect(
-      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+      download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+        naming: defaultNaming,
+      }),
     ).rejects.toThrow('request failed');
   });
 
@@ -272,7 +290,9 @@ describe('download', () => {
     });
 
     try {
-      await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+      await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+        naming: defaultNaming,
+      });
     } catch {
       // expected
     }
@@ -319,7 +339,9 @@ describe('download', () => {
     });
 
     await expect(
-      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+      download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+        naming: defaultNaming,
+      }),
     ).rejects.toThrow('disk full');
   });
 
@@ -349,7 +371,9 @@ describe('download', () => {
     });
 
     try {
-      await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+      await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+        naming: defaultNaming,
+      });
     } catch {
       // expected
     }
@@ -378,7 +402,9 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+      naming: defaultNaming,
+    });
 
     // getName is called with the video title, not page part
     const [, title] = getName.mock.calls[0];
@@ -394,7 +420,9 @@ describe('download', () => {
     });
     mockStreamDownload();
 
-    await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
+      naming: defaultNaming,
+    });
 
     // mockVideoData has p:1 and pages[0].part = 'Part 1' -> 'Part-1'
     const [, title] = getName.mock.calls[0];

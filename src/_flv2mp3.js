@@ -2,12 +2,10 @@ import { fetchFile, createFFmpeg } from '@ffmpeg/ffmpeg';
 import * as fs from 'fs';
 import { resolve } from 'path';
 import { uniqueId } from 'lodash-es';
-// import { debuglog } from './debuglog.js';
 
 (async () => {
   let filename = process.argv[2];
   let ff = process.argv[3];
-  // debuglog(`start: ${filename}`)
   let ffmpeg = createFFmpeg({ log: false });
   await ffmpeg.load();
   try {
@@ -20,7 +18,6 @@ import { uniqueId } from 'lodash-es';
       memBefore,
       await fetchFile(resolve(process.cwd(), filename)),
     );
-    // ffmpeg -y -i ${filename} -q:a 0 ${mp3}
     let ffArgs = ['-y'];
     if (ff) {
       ffArgs = [
@@ -40,11 +37,8 @@ import { uniqueId } from 'lodash-es';
     );
     ffmpeg.FS('unlink', memBefore);
     ffmpeg.FS('unlink', memAfter);
-    // debuglog(`done: ${filename}`);
     process.exit(0);
   } catch {
-    // debuglog(`error: ${filename}`);
-    // debuglog(err);
     process.exit(1);
   }
 })();

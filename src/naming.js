@@ -1,9 +1,6 @@
-import { program } from 'commander';
-
-export function getName(index, title, author, date) {
-  const argv = program.opts();
+export function getName(index, title, author, date, naming) {
   return (
-    argv.naming
+    naming
       .replace(/INDEX|TITLE|AUTHOR|DATE/g, (token) => {
         switch (token) {
           case 'INDEX':
