@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { sleep } from '../src/utils.js';
+import { sleep } from '../src/utils/sleep.js';
 
 describe('sleep', () => {
   it('should resolve after the given time', async () => {

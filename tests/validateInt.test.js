@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { InvalidArgumentError } from 'commander';
-import { validateInt } from '../src/validateInt.js';
+import { validateInt } from '../src/utils/validateInt.js';
 
 describe('validateInt', () => {
   it('should parse a valid integer string', () => {

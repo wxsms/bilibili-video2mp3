@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('../src/download.js', () => ({
+vi.mock('../src/download/downloadTask.js', () => ({
   download: vi.fn(),
 }));
 
-vi.mock('../src/flv2mp3.js', () => ({
+vi.mock('../src/convert/flv2mp3.js', () => ({
   flv2mp3: vi.fn(),
 }));
 
-vi.mock('../src/utils.js', () => ({
+vi.mock('../src/utils/sleep.js', () => ({
   sleep: vi.fn().mockResolvedValue(undefined),
 }));
 
@@ -25,8 +25,8 @@ vi.mock('fs', () => ({
   },
 }));
 
-import { download } from '../src/download.js';
-import { flv2mp3 } from '../src/flv2mp3.js';
+import { download } from '../src/download/downloadTask.js';
+import { flv2mp3 } from '../src/convert/flv2mp3.js';
 import * as fs from 'fs';
 import { download2mp3 } from '../src/download2mp3.js';
 
@@ -167,7 +167,7 @@ describe('download2mp3', () => {
       ...defaultOpts,
     });
 
-    const { sleep } = await import('../src/utils.js');
+    const { sleep } = await import('../src/utils/sleep.js');
     expect(sleep).toHaveBeenCalledWith(2000);
   });
 
@@ -184,7 +184,7 @@ describe('download2mp3', () => {
       ...defaultOpts,
     });
 
-    const { sleep } = await import('../src/utils.js');
+    const { sleep } = await import('../src/utils/sleep.js');
     expect(sleep).toHaveBeenNthCalledWith(1, 2000);
     expect(sleep).toHaveBeenNthCalledWith(2, 4000);
   });

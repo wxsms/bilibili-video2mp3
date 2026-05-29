@@ -13,7 +13,7 @@ vi.mock('child_process', () => ({
 }));
 
 import { execFile } from 'child_process';
-import { flv2mp3 } from '../src/flv2mp3.js';
+import { flv2mp3 } from '../src/convert/flv2mp3.js';
 
 describe('flv2mp3', () => {
   const originalVersion = process.versions.node;

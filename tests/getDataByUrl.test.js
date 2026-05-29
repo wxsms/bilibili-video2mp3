@@ -21,7 +21,7 @@ vi.mock('axios', () => ({
 }));
 
 import axios from 'axios';
-import { getDataByUrl } from '../src/getDataByUrl.js';
+import { getDataByUrl } from '../src/bilibili/getDataByUrl.js';
 
 describe('getDataByUrl', () => {
   it('should parse __INITIAL_STATE__ from HTML response', async () => {

@@ -1,7 +1,7 @@
-import { download } from './download.js';
-import { flv2mp3 } from './flv2mp3.js';
+import { download } from './download/downloadTask.js';
+import { flv2mp3 } from './convert/flv2mp3.js';
 import * as fs from 'fs';
-import { sleep } from './utils.js';
+import { sleep } from './utils/sleep.js';
 import { resolve } from 'path';
 
 const MAX_RETRY = 3;

@@ -1,11 +1,8 @@
 import * as fs from 'fs';
-import { getDataByUrl } from './getDataByUrl.js';
 import { createProgressBar } from './progress.js';
-import { getName } from './naming.js';
 import axios from 'axios';
-import filenamify from 'filenamify';
 
-async function _download(url, title, filename, index) {
+export async function downloadStream(url, title, filename, index) {
   try {
     await fs.promises.stat(filename);
     await fs.promises.unlink(filename);
@@ -57,32 +54,4 @@ async function _download(url, title, filename, index) {
         reject(err);
       });
   });
-}
-
-export async function download(url, index, { naming }) {
-  const data = await getDataByUrl(url);
-  const { videoData } = data;
-  const { pages } = videoData;
-  const isSingle = pages.length === 1;
-  const pid = data.p;
-  const cid = pages[pid - 1].cid;
-  const title = (isSingle ? videoData.title : pages[pid - 1].part).replace(
-    /\s/g,
-    '-',
-  );
-  const date = new Date(videoData.ctime * 1000);
-  const dateString = `${date.getFullYear()}-${
-    date.getMonth() + 1
-  }-${date.getDate()}`;
-  const author = videoData.owner.name;
-  const filename = filenamify(
-    `${getName(index, title, author, dateString, naming)}.flv`,
-  );
-
-  const playUrl = `https://api.bilibili.com/x/player/playurl?fnval=80&cid=${cid}&bvid=${videoData.bvid}`;
-
-  const playResult = await axios.get(playUrl);
-  const videoDownloadUrl = playResult.data.data.dash.audio[0].baseUrl;
-  const bar = await _download(videoDownloadUrl, title, filename, index);
-  return { filename, bar };
 }

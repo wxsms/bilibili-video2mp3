@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { getName } from '../src/naming.js';
+import { getName } from '../src/bilibili/naming.js';
 
 describe('getName', () => {
   it('should replace TITLE, AUTHOR, DATE with values', () => {
