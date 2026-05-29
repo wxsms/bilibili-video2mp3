@@ -17,7 +17,7 @@
   "packageManager": "pnpm@11.4.0",
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
     "lint": "eslint . --fix",
