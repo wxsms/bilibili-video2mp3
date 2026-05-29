@@ -33,4 +33,5 @@ jobs:
       - run: pnpm test -- --coverage
       - uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
