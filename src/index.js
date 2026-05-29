@@ -2,6 +2,7 @@
 import { program } from 'commander';
 import { createRequire } from 'module';
 import { validateInt } from './utils/validateInt.js';
+import { checkFfmpeg } from './utils/checkFfmpeg.js';
 import { fetchPages } from './bilibili/fetchPages.js';
 import { runDownload } from './download/runDownload.js';
 import { interactive } from './interactive.js';
@@ -61,6 +62,13 @@ if (process.argv.length <= 2) {
   const argv = program.opts();
 
   (async function () {
+    if (!argv.skipMp3 && !(await checkFfmpeg())) {
+      console.error(
+        'Error: ffmpeg not found. Install it from https://ffmpeg.org/ or use --skip-mp3 to skip conversion.',
+      );
+      process.exit(1);
+    }
+
     const urls = typeof argv.url === 'string' ? [argv.url] : argv.url;
     let pages = await fetchPages(urls);
 
