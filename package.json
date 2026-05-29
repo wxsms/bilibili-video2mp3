@@ -14,10 +14,10 @@
     "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
   },
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@11.4.0",
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
     "lint": "eslint . --fix",
