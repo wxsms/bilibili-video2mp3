@@ -23,6 +23,7 @@ jobs:
       - run: pnpm install
       - run: pnpm test
       - run: pnpm run test:e2e-mock
+  audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
