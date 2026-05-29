@@ -1,0 +1,4 @@
+minimumReleaseAgeExclude:
+  - '@pkgr/core@0.3.6'
+  - eslint-plugin-prettier@5.5.6
+  - synckit@0.11.13

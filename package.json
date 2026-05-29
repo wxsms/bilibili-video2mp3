@@ -14,10 +14,10 @@
     "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
   },
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@11.4.0",
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": ">=9.0.0"
+    "pnpm": ">=11.0.0"
   },
   "scripts": {
     "lint": "eslint . --fix",
@@ -29,9 +29,9 @@
   "dependencies": {
     "@ffmpeg/core": "0.12.10",
     "@ffmpeg/ffmpeg": "0.12.15",
-    "axios": "1.15.2",
+    "axios": "1.16.1",
     "commander": "14.0.3",
-    "filenamify": "6.0.0",
+    "filenamify": "7.0.1",
     "lodash-es": "4.18.1",
     "multi-progress": "4.0.0",
     "progress": "2.0.3"

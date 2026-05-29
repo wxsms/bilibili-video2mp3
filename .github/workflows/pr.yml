@@ -8,54 +8,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: pnpm run lint
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: pnpm test
   e2e-mock:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: pnpm run test:e2e-mock
   audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: pnpm audit --audit-level moderate
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: node src/index.js --help
   coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 9.15.9
+          version: 11.4.0
       - run: pnpm install
       - run: pnpm test -- --coverage
       - uses: codecov/codecov-action@v6
