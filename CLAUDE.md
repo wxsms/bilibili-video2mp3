@@ -72,7 +72,11 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Use `pnpm` for all package operations: `pnpm install`, `pnpm add`, `pnpm run`, etc.
 - Do not use `npm` or `yarn`.
 
-## 6. Testing
+## 6. Git
+
+**Do not `cd` before git commands.** The working directory is already set to the project root.
+
+## 7. Testing
 
 **Run relevant tests before and after changes.**
 
