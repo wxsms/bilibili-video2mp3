@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { download2mp3 } from './download/download2mp3.js';
-import { getDataByUrl } from './bilibili/getDataByUrl.js';
 import { createRequire } from 'module';
-import { sleep } from './utils/sleep.js';
 import { validateInt } from './utils/validateInt.js';
+import { fetchPages } from './bilibili/fetchPages.js';
+import { runDownload } from './download/runDownload.js';
+import { interactive } from './interactive.js';
 import axios from 'axios';
 
 const require = createRequire(import.meta.url);
 const pkg = require('../package.json');
-program.version(pkg.version);
 
 axios.defaults.headers = {
   referer: 'https://www.bilibili.com/',
@@ -18,6 +17,7 @@ axios.defaults.headers = {
 };
 axios.defaults.timeout = 0;
 
+program.version(pkg.version);
 program
   .requiredOption(
     '-u, --url [urls...]',
@@ -54,35 +54,17 @@ program
   )
   .option('--debug', 'enable debug log.', false);
 
-program.parse(process.argv);
-const argv = program.opts();
+if (process.argv.length <= 2) {
+  interactive();
+} else {
+  program.parse(process.argv);
+  const argv = program.opts();
 
-(async function () {
-  const urls = typeof argv.url === 'string' ? [argv.url] : argv.url;
-  let pages = [];
+  (async function () {
+    const urls = typeof argv.url === 'string' ? [argv.url] : argv.url;
+    let pages = await fetchPages(urls);
 
-  for (let url of urls) {
-    url = url.trim();
-    console.log(`Fetching pages for:`, url);
-    const data = await getDataByUrl(url);
-    pages = [
-      ...pages,
-      ...data.videoData.pages.map((value, index) => {
-        const p = index + 1;
-        return url.indexOf('p=') > 0
-          ? url.replace(/p=\d+/, `p=${p}`)
-          : `${url.replace(/\?.+/, '')}?p=${p}`;
-      }),
-    ];
-  }
-  pages = pages
-    .map((value, index) => {
-      return {
-        url: value,
-        index: index + 1,
-      };
-    })
-    .filter(
+    pages = pages.filter(
       ({ index }) =>
         !(
           (typeof argv.from === 'number' && index < argv.from) ||
@@ -90,38 +72,14 @@ const argv = program.opts();
         ),
     );
 
-  let maxThreads = argv.threads;
-  let currentThreads = 0;
-  let finished = 0;
-
-  for (const page of pages) {
-    while (currentThreads === maxThreads) {
-      await sleep(100);
-    }
-    currentThreads += 1;
-    download2mp3({
-      url: page.url,
-      index: page.index,
+    await runDownload({
+      pages,
+      threads: argv.threads,
       naming: argv.naming,
       ffmpeg: argv.ffmpeg,
       skipMp3: argv.skipMp3,
       debug: argv.debug,
       indexOffset: argv.indexOffset,
-    })
-      .then(() => {
-        currentThreads -= 1;
-        finished += 1;
-        if (finished === pages.length) {
-          process.exit(0);
-        }
-      })
-      .catch((err) => {
-        currentThreads -= 1;
-        finished += 1;
-        console.error(`Failed after retries: ${page.url}`, err.message);
-        if (finished === pages.length) {
-          process.exit(1);
-        }
-      });
-  }
-})();
+    });
+  })();
+}

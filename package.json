@@ -16,7 +16,7 @@
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
   "packageManager": "pnpm@11.4.0",
   "engines": {
-    "node": ">=16.0.0",
+    "node": ">=20.12.0",
     "pnpm": ">=11.0.0"
   },
   "scripts": {
@@ -27,6 +27,7 @@
     "test:e2e-mock": "vitest run tests/e2e-mock.test.js"
   },
   "dependencies": {
+    "@clack/prompts": "1.4.0",
     "@ffmpeg/core": "0.12.10",
     "@ffmpeg/ffmpeg": "0.12.15",
     "axios": "1.16.1",
