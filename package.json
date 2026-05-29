@@ -37,14 +37,14 @@
     "progress": "2.0.3"
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^4.1.7",
+    "@vitest/coverage-v8": "4.1.7",
     "conventional-changelog-cli": "5.0.0",
     "eslint": "10.4.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "prettier": "3.8.3",
-    "vitest": "^4.1.7",
-    "@eslint/js": "^9.0.0",
-    "globals": "^16.0.0"
+    "vitest": "4.1.7",
+    "@eslint/js": "8.57.1",
+    "globals": "13.24.0"
   }
 }
