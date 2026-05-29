@@ -22,3 +22,16 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm test
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: pnpm test -- --coverage
+      - uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage/coverage-final.json
+          fail_ci_if_error: false
