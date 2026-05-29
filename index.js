@@ -46,7 +46,7 @@ program
     validateInt,
     0,
   )
-  .option('-ff --ffmpeg <string>', 'additional options applied to ffmpeg', '')
+  .option('-f --ffmpeg <string>', 'additional options applied to ffmpeg', '')
   .option(
     '--skip-mp3',
     'skip the mp3 transform and keep downloaded file as video.',
