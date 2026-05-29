@@ -79,72 +79,71 @@ export async function interactive() {
     pages = pages.map((page, i) => ({ ...page, index: i + 1 }));
   }
 
-  // Step 4: Convert to MP3?
-  const convertMp3 = await p.confirm({
-    message: '是否转换为 MP3？',
-    initialValue: true,
-  });
-  if (p.isCancel(convertMp3)) {
-    p.cancel('已取消');
-    process.exit(0);
-  }
+  // Step 4: Confirm with defaults, allow editing
+  let convertMp3 = true;
+  let naming = 'TITLE-AUTHOR-DATE';
+  let threads = 10;
+  let debug = false;
 
-  // Step 5: Naming pattern
-  const naming = await p.text({
-    message: '文件命名规则（可用: INDEX, TITLE, AUTHOR, DATE）',
-    placeholder: 'TITLE-AUTHOR-DATE',
-    initialValue: 'TITLE-AUTHOR-DATE',
-  });
-  if (p.isCancel(naming)) {
-    p.cancel('已取消');
-    process.exit(0);
-  }
+  while (true) {
+    p.note(
+      [
+        `分集数: ${pages.length}`,
+        `转 MP3: ${convertMp3 ? '是' : '否'}`,
+        `命名规则: ${naming}`,
+        `线程数: ${threads}`,
+        debug ? `调试模式: 开启` : '',
+      ]
+        .filter(Boolean)
+        .join('\n'),
+      '确认下载信息',
+    );
 
-  // Step 6: Additional options
-  const extras = await p.multiselect({
-    message: '附加选项',
-    options: [{ value: 'debug', label: '调试模式' }],
-    required: false,
-  });
-  if (p.isCancel(extras)) {
-    p.cancel('已取消');
-    process.exit(0);
-  }
-  const debug = extras.includes('debug');
+    const action = await p.select({
+      message: '请确认',
+      options: [
+        { value: 'download', label: '确认下载' },
+        { value: 'mp3', label: `转 MP3: ${convertMp3 ? '是' : '否'}` },
+        { value: 'naming', label: `命名规则: ${naming}` },
+        { value: 'threads', label: `线程数: ${threads}` },
+        { value: 'debug', label: `调试模式: ${debug ? '开启' : '关闭'}` },
+      ],
+    });
+    if (p.isCancel(action)) {
+      p.cancel('已取消');
+      process.exit(0);
+    }
 
-  // Step 7: Thread count
-  const threadsInput = await p.text({
-    message: '下载线程数',
-    placeholder: '10',
-    initialValue: '10',
-  });
-  if (p.isCancel(threadsInput)) {
-    p.cancel('已取消');
-    process.exit(0);
-  }
-  const threads = validateInt(threadsInput) || 10;
+    if (action === 'download') break;
 
-  // Step 8: Summary & confirm
-  p.note(
-    [
-      `分集数: ${pages.length}`,
-      `转 MP3: ${convertMp3 ? '是' : '否'}`,
-      `命名规则: ${naming}`,
-      `线程数: ${threads}`,
-      debug ? `调试模式: 开启` : '',
-    ]
-      .filter(Boolean)
-      .join('\n'),
-    '确认下载信息',
-  );
-
-  const confirmed = await p.confirm({
-    message: `准备下载 ${pages.length} 个分集，确认？`,
-    initialValue: true,
-  });
-  if (p.isCancel(confirmed) || !confirmed) {
-    p.cancel('已取消');
-    process.exit(0);
+    if (action === 'mp3') {
+      const v = await p.confirm({
+        message: '是否转换为 MP3？',
+        initialValue: convertMp3,
+      });
+      if (!p.isCancel(v)) convertMp3 = v;
+    } else if (action === 'naming') {
+      const v = await p.text({
+        message: '文件命名规则（可用: INDEX, TITLE, AUTHOR, DATE）',
+        initialValue: naming,
+      });
+      if (!p.isCancel(v) && v.trim()) naming = v.trim();
+    } else if (action === 'threads') {
+      const v = await p.text({
+        message: '下载线程数',
+        initialValue: String(threads),
+      });
+      if (!p.isCancel(v)) {
+        const n = validateInt(v);
+        if (n) threads = n;
+      }
+    } else if (action === 'debug') {
+      const v = await p.confirm({
+        message: '调试模式',
+        initialValue: debug,
+      });
+      if (!p.isCancel(v)) debug = v;
+    }
   }
 
   p.outro('开始下载...');
