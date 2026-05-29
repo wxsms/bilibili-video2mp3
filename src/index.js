@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { download2mp3 } from './src/download/download2mp3.js';
-import { getDataByUrl } from './src/bilibili/getDataByUrl.js';
+import { download2mp3 } from './download/download2mp3.js';
+import { getDataByUrl } from './bilibili/getDataByUrl.js';
 import { createRequire } from 'module';
-import { sleep } from './src/utils/sleep.js';
-import { validateInt } from './src/utils/validateInt.js';
+import { sleep } from './utils/sleep.js';
+import { validateInt } from './utils/validateInt.js';
 import axios from 'axios';
 
 const require = createRequire(import.meta.url);
-const pkg = require('./package.json');
+const pkg = require('../package.json');
 program.version(pkg.version);
 
 axios.defaults.headers = {
