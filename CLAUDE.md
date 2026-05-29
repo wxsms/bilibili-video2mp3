@@ -63,3 +63,19 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+
+## 5. Package Manager
+
+**Always use pnpm.**
+
+- This project uses pnpm as its package manager (declared in `packageManager` field).
+- Use `pnpm` for all package operations: `pnpm install`, `pnpm add`, `pnpm run`, etc.
+- Do not use `npm` or `yarn`.
+
+## 6. Testing
+
+**Run relevant tests before and after changes.**
+
+- `pnpm test` — Run unit tests (excludes e2e)
+- `pnpm run test:e2e` — Run e2e tests (requires network access to bilibili, run locally only)
+- `pnpm run lint` — Lint and auto-fix
