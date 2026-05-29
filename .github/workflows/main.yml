@@ -31,27 +31,6 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm test -- --coverage
-      - name: Generate coverage badge
-        run: |
-          COVERAGE=$(node -e "
-            const data = JSON.parse(require('fs').readFileSync('coverage/coverage-final.json','utf8'));
-            let total=0, covered=0;
-            for (const f of Object.values(data)) {
-              for (const [n, c] of Object.entries(f.s)) {
-                total++;
-                if (c > 0) covered++;
-              }
-            }
-            const pct = total ? Math.round(covered / total * 1000) / 10 : 0;
-            const color = pct >= 90 ? 'brightgreen' : pct >= 70 ? 'yellow' : 'red';
-            process.stdout.write(JSON.stringify({schemaVersion:1,label:'coverage',message:pct+'%',color}));
-          ")
-          mkdir -p badge-output
-          echo "$COVERAGE" > badge-output/coverage-badge.json
-      - name: Push badge to coverage branch
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: codecov/codecov-action@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./badge-output
-          publish_branch: coverage
-          force_orphan: true
+          fail_ci_if_error: false
