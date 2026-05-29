@@ -45,6 +45,6 @@
     "prettier": "3.8.3",
     "vitest": "4.1.7",
     "@eslint/js": "8.57.1",
-    "globals": "13.24.0"
+    "globals": "17.6.0"
   }
 }
