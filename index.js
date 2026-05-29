@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { program } from 'commander';
-import { download2mp3 } from './src/download2mp3.js';
+import { download2mp3 } from './src/download/download2mp3.js';
 import { getDataByUrl } from './src/bilibili/getDataByUrl.js';
 import { createRequire } from 'module';
 import { sleep } from './src/utils/sleep.js';

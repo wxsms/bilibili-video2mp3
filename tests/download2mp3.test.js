@@ -28,7 +28,7 @@ vi.mock('fs', () => ({
 import { download } from '../src/download/downloadTask.js';
 import { flv2mp3 } from '../src/convert/flv2mp3.js';
 import * as fs from 'fs';
-import { download2mp3 } from '../src/download2mp3.js';
+import { download2mp3 } from '../src/download/download2mp3.js';
 
 const defaultOpts = {
   naming: 'TITLE-AUTHOR-DATE',
