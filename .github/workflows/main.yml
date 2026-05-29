@@ -13,3 +13,38 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: pnpm test
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: pnpm test -- --coverage
+      - name: Generate coverage badge
+        run: |
+          COVERAGE=$(cat coverage/coverage-summary.json | node -e "
+            const data = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8'));
+            const pct = data.total.lines.pct;
+            const color = pct >= 90 ? 'brightgreen' : pct >= 70 ? 'yellow' : 'red';
+            process.stdout.write(JSON.stringify({schemaVersion:1,label:'coverage',message:pct+'%',color}));
+          ")
+          mkdir -p badge-output
+          echo "$COVERAGE" > badge-output/coverage-badge.json
+      - name: Push badge to coverage branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./badge-output
+          publish_branch: coverage
+          force_orphan: true

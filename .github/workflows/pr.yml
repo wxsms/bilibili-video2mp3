@@ -13,3 +13,12 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm run lint
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
+      - run: pnpm install
+      - run: pnpm test

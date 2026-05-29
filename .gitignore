@@ -3,4 +3,6 @@ node_modules
 *.flv
 *.mp3
 *.log
+coverage
+e2e-output
 .wps_claude

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { program, InvalidArgumentError } from 'commander';
+import { program } from 'commander';
 import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
 import { createRequire } from 'module';
 import { sleep } from './src/utils.js';
+import { validateInt } from './src/validateInt.js';
 import axios from 'axios';
 
 const require = createRequire(import.meta.url);
@@ -16,15 +17,6 @@ axios.defaults.headers = {
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
 };
 axios.defaults.timeout = 0;
-
-function validateInt(value) {
-  // parseInt takes a string and a radix
-  const parsedValue = parseInt(value, 10);
-  if (isNaN(parsedValue)) {
-    throw new InvalidArgumentError('Not a number.');
-  }
-  return parsedValue;
-}
 
 program
   .requiredOption(
@@ -54,7 +46,7 @@ program
     validateInt,
     0,
   )
-  .option('-ff --ffmpeg <string>', 'additional options applied to ffmpeg', '')
+  .option('-f --ffmpeg <string>', 'additional options applied to ffmpeg', '')
   .option(
     '--skip-mp3',
     'skip the mp3 transform and keep downloaded file as video.',
@@ -112,12 +104,21 @@ const argv = program.opts();
       await sleep(100);
     }
     currentThreads += 1;
-    download2mp3(page).finally(() => {
-      currentThreads -= 1;
-      finished += 1;
-      if (finished === pages.length) {
-        process.exit(0);
-      }
-    });
+    download2mp3(page)
+      .then(() => {
+        currentThreads -= 1;
+        finished += 1;
+        if (finished === pages.length) {
+          process.exit(0);
+        }
+      })
+      .catch((err) => {
+        currentThreads -= 1;
+        finished += 1;
+        console.error(`Failed after retries: ${page.url}`, err.message);
+        if (finished === pages.length) {
+          process.exit(1);
+        }
+      });
   }
 })();
