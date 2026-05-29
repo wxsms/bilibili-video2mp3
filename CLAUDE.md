@@ -71,6 +71,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - This project uses pnpm as its package manager (declared in `packageManager` field).
 - Use `pnpm` for all package operations: `pnpm install`, `pnpm add`, `pnpm run`, etc.
 - Do not use `npm` or `yarn`.
+- Pin exact versions when adding dependencies (e.g. `pnpm add foo@1.2.3`, not `foo@^1.2.3`). Renovate handles version updates automatically.
 
 ## 6. Git
 
