@@ -5,3 +5,4 @@ node_modules
 *.log
 coverage
 e2e-output
+.wps_claude

@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  afterAll,
+} from 'vitest';
 
 vi.mock('child_process', () => ({
   execFile: vi.fn(),
@@ -52,7 +60,9 @@ describe('flv2mp3', () => {
     });
 
     it('should reject on ffmpeg error', async () => {
-      vi.mocked(execFile).mockImplementation((cmd, args, cb) => cb(new Error('ffmpeg failed')));
+      vi.mocked(execFile).mockImplementation((cmd, args, cb) =>
+        cb(new Error('ffmpeg failed')),
+      );
       await expect(flv2mp3('test.flv')).rejects.toThrow('ffmpeg failed');
     });
   });
@@ -76,7 +86,9 @@ describe('flv2mp3', () => {
     });
 
     it('should reject on child process error', async () => {
-      vi.mocked(execFile).mockImplementation((cmd, args, opts, cb) => cb(new Error('child failed')));
+      vi.mocked(execFile).mockImplementation((cmd, args, opts, cb) =>
+        cb(new Error('child failed')),
+      );
       await expect(flv2mp3('test.flv')).rejects.toThrow('child failed');
     });
   });

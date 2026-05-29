@@ -7,9 +7,7 @@ export async function getDataByUrl(url) {
   // console.log('--------------------');
   // end by this:
   // ;(function(){var s;(s=document.currentScript||document.scripts[document.scripts.length-1]).parentNode.removeChild(s);}());</script>
-  const match = data.match(
-    /__INITIAL_STATE__=(.*?);\(function\(\)/,
-  );
+  const match = data.match(/__INITIAL_STATE__=(.*?);\(function\(\)/);
   if (!match) {
     throw new Error('Failed to extract __INITIAL_STATE__ from page');
   }

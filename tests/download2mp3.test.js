@@ -50,7 +50,10 @@ describe('download2mp3', () => {
   });
 
   it('should download and convert to mp3 by default', async () => {
-    vi.mocked(download).mockResolvedValue({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      bar: mockBar,
+    });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({ url: 'https://test.com?p=1', index: 1 });
@@ -66,7 +69,10 @@ describe('download2mp3', () => {
       debug: false,
       ffmpeg: '',
     });
-    vi.mocked(download).mockResolvedValue({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      bar: mockBar,
+    });
 
     await download2mp3({ url: 'https://test.com?p=1', index: 1 });
 
@@ -80,7 +86,10 @@ describe('download2mp3', () => {
       debug: false,
       ffmpeg: '',
     });
-    vi.mocked(download).mockResolvedValue({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      bar: mockBar,
+    });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({ url: 'https://test.com?p=1', index: 3 });
@@ -95,7 +104,10 @@ describe('download2mp3', () => {
       debug: false,
       ffmpeg: '',
     });
-    vi.mocked(download).mockResolvedValue({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      bar: mockBar,
+    });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({ url: 'https://test.com?p=1', index: 1 });
@@ -106,7 +118,10 @@ describe('download2mp3', () => {
   });
 
   it('should delete the flv file after conversion', async () => {
-    vi.mocked(download).mockResolvedValue({ filename: 'test.flv', bar: mockBar });
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      bar: mockBar,
+    });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({ url: 'https://test.com?p=1', index: 1 });

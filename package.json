@@ -14,60 +14,37 @@
     "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
   },
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.0.0",
+    "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "lint": "npx eslint . --fix",
+    "lint": "eslint . --fix",
     "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0",
     "test": "vitest run --exclude tests/e2e.test.js",
-"test:e2e": "vitest run tests/e2e.test.js"
+    "test:e2e": "vitest run tests/e2e.test.js"
   },
   "dependencies": {
-    "@ffmpeg/core": "0.11.0",
-    "@ffmpeg/ffmpeg": "0.11.6",
-    "axios": "1.7.9",
-    "commander": "11.1.0",
+    "@ffmpeg/core": "0.12.10",
+    "@ffmpeg/ffmpeg": "0.12.15",
+    "axios": "1.15.2",
+    "commander": "14.0.3",
     "filenamify": "6.0.0",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.18.1",
     "minimist": "1.2.8",
     "multi-progress": "4.0.0",
     "progress": "2.0.3"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.1.7",
-    "conventional-changelog-cli": "4.1.0",
-    "eslint": "8.57.1",
-    "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-prettier": "5.2.1",
-    "prettier": "3.4.2",
-    "vitest": "^4.1.7"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "prettier"
-    ],
-    "plugins": [
-      "prettier"
-    ],
-    "parserOptions": {
-      "ecmaVersion": 2020,
-      "sourceType": "module"
-    },
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "semi": true,
-          "singleQuote": true,
-          "endOfLine": "auto"
-        }
-      ]
-    }
+    "conventional-changelog-cli": "5.0.0",
+    "eslint": "10.4.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.6",
+    "prettier": "3.8.3",
+    "vitest": "^4.1.7",
+    "@eslint/js": "^9.0.0",
+    "globals": "^16.0.0"
   }
 }

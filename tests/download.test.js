@@ -109,18 +109,24 @@ describe('download', () => {
   it('should call getDataByUrl with the given url', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
     await download('https://www.bilibili.com/video/BV1test?p=1', 1);
-    expect(getDataByUrl).toHaveBeenCalledWith('https://www.bilibili.com/video/BV1test?p=1');
+    expect(getDataByUrl).toHaveBeenCalledWith(
+      'https://www.bilibili.com/video/BV1test?p=1',
+    );
   });
 
   it('should call getName with index and derived metadata', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
@@ -139,7 +145,9 @@ describe('download', () => {
   it('should fetch playurl API with correct cid and bvid', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
@@ -153,11 +161,16 @@ describe('download', () => {
   it('should return filename and bar', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
-    const result = await download('https://www.bilibili.com/video/BV1test?p=1', 1);
+    const result = await download(
+      'https://www.bilibili.com/video/BV1test?p=1',
+      1,
+    );
     expect(result.filename).toBe('TestFile.flv');
     expect(result.bar).toBeDefined();
   });
@@ -165,7 +178,9 @@ describe('download', () => {
   it('should create progress bar with correct params', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload(2048);
 
@@ -180,7 +195,9 @@ describe('download', () => {
 
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
@@ -191,7 +208,9 @@ describe('download', () => {
   it('should reject on stream error', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
 
     const mockStream = new EventEmitter();
@@ -207,23 +226,31 @@ describe('download', () => {
       headers: { 'content-length': '1024' },
     });
 
-    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('network broken');
+    await expect(
+      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+    ).rejects.toThrow('network broken');
   });
 
   it('should reject on axios request failure', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     axios.mockRejectedValueOnce(new Error('request failed'));
 
-    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('request failed');
+    await expect(
+      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+    ).rejects.toThrow('request failed');
   });
 
   it('should ignore data events after stream failure', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
 
     const mockBar = { tick: vi.fn() };
@@ -246,12 +273,12 @@ describe('download', () => {
 
     try {
       await download('https://www.bilibili.com/video/BV1test?p=1', 1);
-    } catch (e) {
+    } catch {
       // expected
     }
 
     // bar.tick should have been called for error (tick total), but NOT for post-error data/end
-    const tickCalls = mockBar.tick.mock.calls.map((c) => c[0]);
+    const tickCalls = mockBar.tick.mock.calls.map((c) => c[0]); // eslint-disable-line no-unused-vars
     // Should not have a 'done' or 'downloading' status after error
     const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
     expect(statusCalls.length).toBeLessThanOrEqual(2); // at most initial tick + error status
@@ -260,7 +287,9 @@ describe('download', () => {
   it('should reject on writeStream error', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
 
     // Override createWriteStream to emit 'error'
@@ -290,13 +319,17 @@ describe('download', () => {
       headers: { 'content-length': '1024' },
     });
 
-    await expect(download('https://www.bilibili.com/video/BV1test?p=1', 1)).rejects.toThrow('disk full');
+    await expect(
+      download('https://www.bilibili.com/video/BV1test?p=1', 1),
+    ).rejects.toThrow('disk full');
   });
 
   it('should ignore finish event after stream error', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
 
     const mockBar = { tick: vi.fn() };
@@ -318,12 +351,14 @@ describe('download', () => {
 
     try {
       await download('https://www.bilibili.com/video/BV1test?p=1', 1);
-    } catch (e) {
+    } catch {
       // expected
     }
 
     // Should not have resolved successfully, so no 'done' status tick
-    const doneTicks = mockBar.tick.mock.calls.filter((c) => c[1] && c[1].status === 'done');
+    const doneTicks = mockBar.tick.mock.calls.filter(
+      (c) => c[1] && c[1].status === 'done',
+    );
     expect(doneTicks.length).toBe(0);
   });
 
@@ -338,7 +373,9 @@ describe('download', () => {
     };
     vi.mocked(getDataByUrl).mockResolvedValue(singlePageData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 
@@ -352,7 +389,9 @@ describe('download', () => {
   it('should use page part name for multi-page videos', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     axios.get.mockResolvedValue({
-      data: { data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } } },
+      data: {
+        data: { dash: { audio: [{ baseUrl: 'https://audio.url/test.m4s' }] } },
+      },
     });
     mockStreamDownload();
 

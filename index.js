@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { program, InvalidArgumentError } from 'commander';
+import { program } from 'commander';
 import { download2mp3 } from './src/download2mp3.js';
 import { getDataByUrl } from './src/getDataByUrl.js';
 import { createRequire } from 'module';

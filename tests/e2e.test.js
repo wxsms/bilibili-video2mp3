@@ -33,42 +33,49 @@ describe('E2E: CLI', () => {
     await mkdir(OUTPUT, { recursive: true });
   });
 
-  it(
-    'should download and convert to mp3',
-    { timeout: 120_000 },
-    async () => {
-      const dir = await prepareDir('mp3');
-      await runCli(['--url', URL, '--from', '1', '--to', '1', '--naming', 'INDEX'], dir);
+  it('should download and convert to mp3', { timeout: 120_000 }, async () => {
+    const dir = await prepareDir('mp3');
+    await runCli(
+      ['--url', URL, '--from', '1', '--to', '1', '--naming', 'INDEX'],
+      dir,
+    );
 
-      const files = await readdir(dir);
-      const mp3Files = files.filter((f) => f.endsWith('.mp3'));
-      expect(mp3Files.length).toBeGreaterThanOrEqual(1);
-    },
-  );
+    const files = await readdir(dir);
+    const mp3Files = files.filter((f) => f.endsWith('.mp3'));
+    expect(mp3Files.length).toBeGreaterThanOrEqual(1);
+  });
 
-  it(
-    'should download only with --skip-mp3',
-    { timeout: 120_000 },
-    async () => {
-      const dir = await prepareDir('skip-mp3');
-      await runCli(['--url', URL, '--from', '1', '--to', '1', '--skip-mp3', '--naming', 'INDEX'], dir);
+  it('should download only with --skip-mp3', { timeout: 120_000 }, async () => {
+    const dir = await prepareDir('skip-mp3');
+    await runCli(
+      [
+        '--url',
+        URL,
+        '--from',
+        '1',
+        '--to',
+        '1',
+        '--skip-mp3',
+        '--naming',
+        'INDEX',
+      ],
+      dir,
+    );
 
-      const files = await readdir(dir);
-      const flvFiles = files.filter((f) => f.endsWith('.flv'));
-      expect(flvFiles.length).toBeGreaterThanOrEqual(1);
-    },
-  );
+    const files = await readdir(dir);
+    const flvFiles = files.filter((f) => f.endsWith('.flv'));
+    expect(flvFiles.length).toBeGreaterThanOrEqual(1);
+  });
 
-  it(
-    'should download multiple pages',
-    { timeout: 120_000 },
-    async () => {
-      const dir = await prepareDir('multi-page');
-      await runCli(['--url', URL, '--from', '1', '--to', '3', '--naming', 'INDEX'], dir);
+  it('should download multiple pages', { timeout: 120_000 }, async () => {
+    const dir = await prepareDir('multi-page');
+    await runCli(
+      ['--url', URL, '--from', '1', '--to', '3', '--naming', 'INDEX'],
+      dir,
+    );
 
-      const files = await readdir(dir);
-      const mp3Files = files.filter((f) => f.endsWith('.mp3'));
-      expect(mp3Files.length).toBe(3);
-    },
-  );
+    const files = await readdir(dir);
+    const mp3Files = files.filter((f) => f.endsWith('.mp3'));
+    expect(mp3Files.length).toBe(3);
+  });
 });
