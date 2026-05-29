@@ -1,7 +1,7 @@
 # bilibili-video2mp3
 
 [![CI](https://github.com/wxsms/bilibili-video2mp3/actions/workflows/main.yml/badge.svg)](https://github.com/wxsms/bilibili-video2mp3/actions/workflows/main.yml)
-[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wxsms/bilibili-video2mp3/coverage/coverage-badge.json)](https://github.com/wxsms/bilibili-video2mp3/actions/workflows/main.yml)
+[![Coverage](https://codecov.io/gh/wxsms/bilibili-video2mp3/branch/master/graph/badge.svg)](https://codecov.io/gh/wxsms/bilibili-video2mp3)
 
 A tool to download all videos and convert to mp3 inside a video set of bilibili (also works for single video, of course).
 
