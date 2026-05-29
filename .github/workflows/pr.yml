@@ -39,7 +39,7 @@ jobs:
         with:
           version: 9.15.9
       - run: pnpm install
-      - run: node index.js --help
+      - run: node src/index.js --help
   coverage:
     runs-on: ubuntu-latest
     steps:

@@ -12,7 +12,7 @@ vi.mock('multi-progress', () => {
   };
 });
 
-import { createProgressBar } from '../src/progress.js';
+import { createProgressBar } from '../src/download/progress.js';
 import { __newBar } from 'multi-progress';
 
 describe('createProgressBar', () => {

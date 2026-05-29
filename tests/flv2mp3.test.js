@@ -12,14 +12,8 @@ vi.mock('child_process', () => ({
   execFile: vi.fn(),
 }));
 
-vi.mock('commander', () => ({
-  program: {
-    opts: () => ({ ffmpeg: '-vn -ar 44100' }),
-  },
-}));
-
 import { execFile } from 'child_process';
-import { flv2mp3 } from '../src/flv2mp3.js';
+import { flv2mp3 } from '../src/convert/flv2mp3.js';
 
 describe('flv2mp3', () => {
   const originalVersion = process.versions.node;
@@ -50,9 +44,9 @@ describe('flv2mp3', () => {
       expect(args).toContain('test.mp3');
     });
 
-    it('should include extra ffmpeg options from argv', async () => {
+    it('should include extra ffmpeg options', async () => {
       vi.mocked(execFile).mockImplementation((cmd, args, cb) => cb(null));
-      await flv2mp3('test.flv');
+      await flv2mp3('test.flv', '-vn -ar 44100');
       const args = vi.mocked(execFile).mock.calls[0][1];
       expect(args).toContain('-vn');
       expect(args).toContain('-ar');
@@ -77,12 +71,13 @@ describe('flv2mp3', () => {
 
     it('should spawn _flv2mp3.js child process', async () => {
       vi.mocked(execFile).mockImplementation((cmd, args, opts, cb) => cb(null));
-      await flv2mp3('test.flv');
+      await flv2mp3('test.flv', '-vn -ar 44100');
       expect(execFile).toHaveBeenCalledTimes(1);
       const [cmd, args] = vi.mocked(execFile).mock.calls[0];
       expect(cmd).toBe('node');
       expect(args[0]).toContain('_flv2mp3.js');
       expect(args).toContain('test.flv');
+      expect(args).toContain('-vn -ar 44100');
     });
 
     it('should reject on child process error', async () => {
