@@ -22,7 +22,7 @@ jobs:
           version: 9.15.9
       - run: pnpm install
       - run: pnpm test
-  audit:
+      - run: pnpm run test:e2e-mock
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

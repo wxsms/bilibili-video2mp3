@@ -23,7 +23,8 @@
     "lint": "eslint . --fix",
     "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0",
     "test": "vitest run --exclude tests/e2e.test.js",
-    "test:e2e": "vitest run tests/e2e.test.js"
+    "test:e2e": "vitest run tests/e2e.test.js",
+    "test:e2e-mock": "vitest run tests/e2e-mock.test.js"
   },
   "dependencies": {
     "@ffmpeg/core": "0.12.10",

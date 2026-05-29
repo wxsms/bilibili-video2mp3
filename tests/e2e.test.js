@@ -5,7 +5,7 @@ import { resolve } from 'path';
 
 const ROOT = resolve(import.meta.dirname, '..');
 const OUTPUT = resolve(ROOT, 'e2e-output');
-const CLI = resolve(ROOT, 'index.js');
+const CLI = resolve(ROOT, 'src/index.js');
 const URL = 'https://www.bilibili.com/video/BV1yZ4y1X7v3';
 
 function runCli(args, cwd) {
