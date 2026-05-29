@@ -33,7 +33,7 @@ describe('E2E: CLI', () => {
     await mkdir(OUTPUT, { recursive: true });
   });
 
-  it('should download and convert to mp3', { timeout: 120_000 }, async () => {
+  it('should download and convert to mp3', { timeout: 120000 }, async () => {
     const dir = await prepareDir('mp3');
     await runCli(
       ['--url', URL, '--from', '1', '--to', '1', '--naming', 'INDEX'],
@@ -45,7 +45,7 @@ describe('E2E: CLI', () => {
     expect(mp3Files.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should download only with --skip-mp3', { timeout: 120_000 }, async () => {
+  it('should download only with --skip-mp3', { timeout: 120000 }, async () => {
     const dir = await prepareDir('skip-mp3');
     await runCli(
       [
@@ -67,7 +67,7 @@ describe('E2E: CLI', () => {
     expect(flvFiles.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should download multiple pages', { timeout: 120_000 }, async () => {
+  it('should download multiple pages', { timeout: 120000 }, async () => {
     const dir = await prepareDir('multi-page');
     await runCli(
       ['--url', URL, '--from', '1', '--to', '3', '--naming', 'INDEX'],

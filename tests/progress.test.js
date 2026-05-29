@@ -1,10 +1,12 @@
 import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('multi-progress', () => {
-  const newBar = vi.fn((_fmt, _opts) => ({ tick: vi.fn() }));
+  const newBar = vi.fn(() => ({ tick: vi.fn() }));
   return {
     default: class MockMultiProgress {
-      newBar = newBar;
+      constructor() {
+        this.newBar = newBar;
+      }
     },
     __newBar: newBar,
   };

@@ -278,7 +278,6 @@ describe('download', () => {
     }
 
     // bar.tick should have been called for error (tick total), but NOT for post-error data/end
-    const tickCalls = mockBar.tick.mock.calls.map((c) => c[0]); // eslint-disable-line no-unused-vars
     // Should not have a 'done' or 'downloading' status after error
     const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
     expect(statusCalls.length).toBeLessThanOrEqual(2); // at most initial tick + error status
