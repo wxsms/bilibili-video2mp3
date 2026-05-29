@@ -97,6 +97,7 @@ export async function interactive() {
         value: page.index,
         label: `${page.index}. ${page.title}`,
       })),
+      initialValues: pages.map((page) => page.index),
       required: true,
     });
     if (p.isCancel(selected)) {
