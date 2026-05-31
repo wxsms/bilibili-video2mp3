@@ -1,5 +1,6 @@
 import * as p from '@clack/prompts';
 import { createRequire } from 'module';
+import { mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { fetchPages } from './bilibili/fetchPages.js';
 import { runDownload } from './download/runDownload.js';
@@ -194,6 +195,7 @@ export async function interactive() {
 
   p.outro('🚀 开始下载...');
 
+  mkdirSync(outputDir, { recursive: true });
   process.chdir(outputDir);
   await runDownload({
     pages,
