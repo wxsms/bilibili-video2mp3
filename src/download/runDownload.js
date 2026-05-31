@@ -1,4 +1,5 @@
 import { download2mp3 } from './download2mp3.js';
+import { terminateProgress } from './progress.js';
 import { sleep } from '../utils/sleep.js';
 
 export async function runDownload({
@@ -32,6 +33,7 @@ export async function runDownload({
         currentThreads -= 1;
         finished += 1;
         if (finished === pages.length) {
+          terminateProgress();
           process.exit(0);
         }
       })
@@ -40,6 +42,7 @@ export async function runDownload({
         finished += 1;
         console.error(`Failed after retries: ${page.url}`, err.message);
         if (finished === pages.length) {
+          terminateProgress();
           process.exit(1);
         }
       });

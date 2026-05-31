@@ -17,3 +17,9 @@ export function createProgressBar(index, title, total) {
     total: total,
   });
 }
+
+export function terminateProgress() {
+  if (multi) {
+    multi.terminate();
+  }
+}
