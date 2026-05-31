@@ -25,6 +25,6 @@ export async function download(url, index, { naming }) {
   );
 
   const videoDownloadUrl = await getPlayUrl(cid, videoData.bvid);
-  const bar = await downloadStream(videoDownloadUrl, title, filename, index);
-  return { filename, bar };
+  await downloadStream(videoDownloadUrl, filename);
+  return { filename, title };
 }

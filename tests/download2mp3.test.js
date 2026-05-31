@@ -39,8 +39,6 @@ const defaultOpts = {
 };
 
 describe('download2mp3', () => {
-  const mockBar = { tick: vi.fn() };
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -48,7 +46,7 @@ describe('download2mp3', () => {
   it('should download and convert to mp3 by default', async () => {
     vi.mocked(download).mockResolvedValue({
       filename: 'test.flv',
-      bar: mockBar,
+      title: 'test',
     });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
@@ -67,7 +65,7 @@ describe('download2mp3', () => {
   it('should skip mp3 conversion when skipMp3 is set', async () => {
     vi.mocked(download).mockResolvedValue({
       filename: 'test.flv',
-      bar: mockBar,
+      title: 'test',
     });
 
     await download2mp3({
@@ -83,7 +81,7 @@ describe('download2mp3', () => {
   it('should apply indexOffset to the index', async () => {
     vi.mocked(download).mockResolvedValue({
       filename: 'test.flv',
-      bar: mockBar,
+      title: 'test',
     });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
@@ -99,28 +97,10 @@ describe('download2mp3', () => {
     }); // 5 + 3
   });
 
-  it('should tick bar with "converting" status before flv2mp3', async () => {
-    vi.mocked(download).mockResolvedValue({
-      filename: 'test.flv',
-      bar: mockBar,
-    });
-    vi.mocked(flv2mp3).mockResolvedValue(undefined);
-
-    await download2mp3({
-      url: 'https://test.com?p=1',
-      index: 1,
-      ...defaultOpts,
-    });
-
-    // bar.tick should be called with converting, then done
-    expect(mockBar.tick).toHaveBeenCalledWith({ status: 'converting' });
-    expect(mockBar.tick).toHaveBeenCalledWith({ status: 'done' });
-  });
-
   it('should delete the flv file after conversion', async () => {
     vi.mocked(download).mockResolvedValue({
       filename: 'test.flv',
-      bar: mockBar,
+      title: 'test',
     });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
@@ -133,11 +113,26 @@ describe('download2mp3', () => {
     expect(fs.promises.unlink).toHaveBeenCalledWith('test.flv');
   });
 
+  it('should return success result on happy path', async () => {
+    vi.mocked(download).mockResolvedValue({
+      filename: 'test.flv',
+      title: 'test',
+    });
+    vi.mocked(flv2mp3).mockResolvedValue(undefined);
+
+    const result = await download2mp3({
+      url: 'https://test.com?p=1',
+      index: 2,
+      ...defaultOpts,
+    });
+
+    expect(result).toEqual({ index: 2, success: true });
+  });
+
   it('should retry on download failure', async () => {
-    // First call fails, second call succeeds
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('download failed'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', title: 'test' });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({
@@ -158,7 +153,7 @@ describe('download2mp3', () => {
   it('should sleep with backoff before retrying on failure', async () => {
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', title: 'test' });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({
@@ -175,7 +170,7 @@ describe('download2mp3', () => {
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail1'))
       .mockRejectedValueOnce(new Error('fail2'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', title: 'test' });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({
@@ -189,37 +184,25 @@ describe('download2mp3', () => {
     expect(sleep).toHaveBeenNthCalledWith(2, 4000);
   });
 
-  it('should throw after exceeding max retries', async () => {
+  it('should return failure result after exceeding max retries', async () => {
     vi.mocked(download).mockRejectedValue(new Error('permanent fail'));
 
-    await expect(
-      download2mp3({ url: 'https://test.com?p=1', index: 1, ...defaultOpts }),
-    ).rejects.toThrow('permanent fail');
-    expect(download).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
-  });
-
-  it('should not tick bar with "error" when bar is not yet available', async () => {
-    // First call fails before bar is assigned, so b?.tick should be a no-op
-    const localBar = { tick: vi.fn() };
-    vi.mocked(download)
-      .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: localBar });
-    vi.mocked(flv2mp3).mockResolvedValue(undefined);
-
-    await download2mp3({
+    const result = await download2mp3({
       url: 'https://test.com?p=1',
       index: 1,
       ...defaultOpts,
     });
 
-    // localBar only received calls from the successful retry, no error tick
-    expect(localBar.tick).not.toHaveBeenCalledWith({ status: 'error' });
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('permanent fail');
+    expect(result.url).toBe('https://test.com?p=1');
+    expect(download).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
   });
 
   it('should write debug log when debug is enabled and error occurs', async () => {
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', title: 'test' });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({
@@ -239,7 +222,7 @@ describe('download2mp3', () => {
   it('should not write debug log when debug is disabled', async () => {
     vi.mocked(download)
       .mockRejectedValueOnce(new Error('fail'))
-      .mockResolvedValueOnce({ filename: 'test.flv', bar: mockBar });
+      .mockResolvedValueOnce({ filename: 'test.flv', title: 'test' });
     vi.mocked(flv2mp3).mockResolvedValue(undefined);
 
     await download2mp3({

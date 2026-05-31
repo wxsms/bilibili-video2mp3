@@ -31,6 +31,7 @@ function runCli(args, cwd) {
       env: {
         ...process.env,
         BILIBILI_MOCK_DIR: pathResolve(ROOT, 'tests/fixtures'),
+        BV2MP3_SKIP_FFMPEG_CHECK: '1',
       },
     });
     let stdout = '';

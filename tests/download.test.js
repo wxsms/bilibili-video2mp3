@@ -20,10 +20,6 @@ vi.mock('../src/bilibili/naming.js', () => ({
   getName: vi.fn(() => 'TestFile'),
 }));
 
-vi.mock('../src/download/progress.js', () => ({
-  createProgressBar: vi.fn(() => ({ tick: vi.fn() })),
-}));
-
 vi.mock('filenamify', () => ({
   default: (name) => name,
 }));
@@ -55,7 +51,6 @@ import axios from 'axios';
 import { getDataByUrl } from '../src/bilibili/getDataByUrl.js';
 import { getPlayUrl } from '../src/bilibili/getPlayUrl.js';
 import { getName } from '../src/bilibili/naming.js';
-import { createProgressBar } from '../src/download/progress.js';
 import * as fs from 'fs';
 import { download } from '../src/download/downloadTask.js';
 
@@ -154,7 +149,7 @@ describe('download', () => {
     expect(getPlayUrl).toHaveBeenCalledWith(100, 'BV1test');
   });
 
-  it('should return filename and bar', async () => {
+  it('should return filename and title', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     vi.mocked(getPlayUrl).mockResolvedValue('https://audio.url/test.m4s');
     mockStreamDownload();
@@ -165,18 +160,7 @@ describe('download', () => {
       { naming: defaultNaming },
     );
     expect(result.filename).toBe('TestFile.flv');
-    expect(result.bar).toBeDefined();
-  });
-
-  it('should create progress bar with correct params', async () => {
-    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
-    vi.mocked(getPlayUrl).mockResolvedValue('https://audio.url/test.m4s');
-    mockStreamDownload(2048);
-
-    await download('https://www.bilibili.com/video/BV1test?p=1', 2, {
-      naming: defaultNaming,
-    });
-    expect(createProgressBar).toHaveBeenCalledWith(2, 'Part-1', 2048);
+    expect(result.title).toBe('Part-1');
   });
 
   it('should unlink existing file before download', async () => {
@@ -229,39 +213,6 @@ describe('download', () => {
     ).rejects.toThrow('request failed');
   });
 
-  it('should ignore data events after stream failure', async () => {
-    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
-    vi.mocked(getPlayUrl).mockResolvedValue('https://audio.url/test.m4s');
-
-    const mockBar = { tick: vi.fn() };
-    vi.mocked(createProgressBar).mockReturnValueOnce(mockBar);
-
-    const mockStream = new EventEmitter();
-    mockStream.pipe = vi.fn((ws) => {
-      setTimeout(() => {
-        mockStream.emit('error', new Error('stream error'));
-        mockStream.emit('data', Buffer.alloc(100));
-        mockStream.emit('end');
-      }, 0);
-      return ws;
-    });
-    axios.mockResolvedValueOnce({
-      data: mockStream,
-      headers: { 'content-length': '1024' },
-    });
-
-    try {
-      await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
-        naming: defaultNaming,
-      });
-    } catch {
-      // expected
-    }
-
-    const statusCalls = mockBar.tick.mock.calls.filter((c) => c[1]);
-    expect(statusCalls.length).toBeLessThanOrEqual(2);
-  });
-
   it('should reject on writeStream error', async () => {
     vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
     vi.mocked(getPlayUrl).mockResolvedValue('https://audio.url/test.m4s');
@@ -297,40 +248,6 @@ describe('download', () => {
         naming: defaultNaming,
       }),
     ).rejects.toThrow('disk full');
-  });
-
-  it('should ignore finish event after stream error', async () => {
-    vi.mocked(getDataByUrl).mockResolvedValue(mockVideoData);
-    vi.mocked(getPlayUrl).mockResolvedValue('https://audio.url/test.m4s');
-
-    const mockBar = { tick: vi.fn() };
-    vi.mocked(createProgressBar).mockReturnValueOnce(mockBar);
-
-    const mockStream = new EventEmitter();
-    mockStream.pipe = vi.fn((ws) => {
-      setTimeout(() => {
-        mockStream.emit('error', new Error('stream error'));
-        ws.emit('finish');
-      }, 0);
-      return ws;
-    });
-    axios.mockResolvedValueOnce({
-      data: mockStream,
-      headers: { 'content-length': '1024' },
-    });
-
-    try {
-      await download('https://www.bilibili.com/video/BV1test?p=1', 1, {
-        naming: defaultNaming,
-      });
-    } catch {
-      // expected
-    }
-
-    const doneTicks = mockBar.tick.mock.calls.filter(
-      (c) => c[1] && c[1].status === 'done',
-    );
-    expect(doneTicks.length).toBe(0);
   });
 
   it('should use videoData.title for single-page videos', async () => {
