@@ -1,8 +1,7 @@
 import * as fs from 'fs';
-import { createProgressBar } from './progress.js';
 import axios from 'axios';
 
-export async function downloadStream(url, title, filename, index) {
+export async function downloadStream(url, filename) {
   try {
     await fs.promises.stat(filename);
     await fs.promises.unlink(filename);
@@ -18,34 +17,22 @@ export async function downloadStream(url, title, filename, index) {
         Range: `bytes=${0}-`,
       },
     })
-      .then(({ data, headers }) => {
+      .then(({ data }) => {
         const writeStream = fs.createWriteStream(filename);
-        const total = parseInt(headers['content-length'], 10);
-        const bar = createProgressBar(index, title, total);
         let failed = false;
         data.pipe(writeStream);
-        data.on('data', (chunk) => {
-          if (failed) {
-            return;
-          }
-          bar.tick(chunk.length, { status: 'downloading' });
-        });
         writeStream.on('finish', () => {
           if (failed) {
             return;
           }
-          resolve(bar);
+          resolve();
         });
         writeStream.on('error', (err) => {
           failed = true;
-          bar.tick(total);
-          bar.tick({ status: 'error' });
           reject(err);
         });
         data.on('error', (err) => {
           failed = true;
-          bar.tick(total);
-          bar.tick({ status: 'error' });
           writeStream.destroy();
           reject(err);
         });

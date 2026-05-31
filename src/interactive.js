@@ -193,11 +193,9 @@ export async function interactive() {
     }
   }
 
-  p.outro('🚀 开始下载...');
-
   mkdirSync(outputDir, { recursive: true });
   process.chdir(outputDir);
-  await runDownload({
+  const { total, failed } = await runDownload({
     pages,
     threads,
     naming,
@@ -206,4 +204,10 @@ export async function interactive() {
     debug,
     indexOffset: 0,
   });
+
+  if (failed > 0) {
+    p.outro(`⚠️ 完成 ${total - failed}/${total}，${failed} 个失败`);
+  } else {
+    p.outro(`✅ 全部完成 (${total}/${total})`);
+  }
 }

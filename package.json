@@ -30,9 +30,7 @@
     "@clack/prompts": "1.4.0",
     "axios": "1.16.1",
     "commander": "14.0.3",
-    "filenamify": "7.0.1",
-    "multi-progress": "4.0.0",
-    "progress": "2.0.3"
+    "filenamify": "7.0.1"
   },
   "devDependencies": {
     "@eslint/js": "8.57.1",

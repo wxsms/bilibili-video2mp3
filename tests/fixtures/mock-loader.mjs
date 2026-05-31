@@ -93,9 +93,8 @@ export async function load(url, context, nextLoad) {
   ) {
     result.source = [
       "import { writeFile } from 'node:fs/promises';",
-      'export async function downloadStream(url, title, filename, index) {',
+      'export async function downloadStream(url, filename) {',
       "  await writeFile(filename, 'mock-flv-data');",
-      '  return { tick: () => {} };',
       '}',
     ].join('\n');
     return result;
