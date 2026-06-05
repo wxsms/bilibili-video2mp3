@@ -14,7 +14,7 @@
     "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
   },
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
-  "packageManager": "pnpm@11.5.1",
+  "packageManager": "pnpm@11.5.2",
   "engines": {
     "node": ">=16.0.0",
     "pnpm": ">=11.0.0"
