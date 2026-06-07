@@ -58,7 +58,7 @@ jobs:
           version: 11.5.2
       - run: pnpm install
       - run: pnpm test -- --coverage
-      - uses: codecov/codecov-action@v6
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
