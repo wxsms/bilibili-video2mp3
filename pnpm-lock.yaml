@@ -18,8 +18,8 @@ importers:
         specifier: 15.0.0
         version: 15.0.0
       filenamify:
-        specifier: 7.0.1
-        version: 7.0.1
+        specifier: 7.0.2
+        version: 7.0.2
     devDependencies:
       '@eslint/js':
         specifier: 10.0.1
@@ -240,12 +240,14 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [ppc64]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-s390x-gnu@1.0.2':
     resolution: {integrity: sha512-fy8rXxuYEu602abC8MUNaPjYLIFzReOaEIEMKMUa0rFEUxNpVXhs15KSSQ4qlqSaM7B6rcj9rDZgADh/IGDzLQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [s390x]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-x64-gnu@1.0.2':
     resolution: {integrity: sha512-0+bOkiQ779+r1WpoHOWHqncvyySci0vKph+myNDYb+im6meJAzHQXay6oEgnkHuUGouM1LKTZwqKpBow6Kj7CQ==}
@@ -653,8 +655,8 @@ packages:
     resolution: {integrity: sha512-9ZT504KxEQDamsOogZImAWGEN24R1uFAxU3ZS4AZqn2ooidmN68Olh7n4/RcA4lLatZztjA0ZSuxeLHVoCc8JA==}
     engines: {node: '>=20'}
 
-  filenamify@7.0.1:
-    resolution: {integrity: sha512-9b4rfnaX2MkJCgp27wypV6DAMvj4WMOSgJ+TdcpJIO84Dql+Cv6iJjdG4XDTLubOWkfNiBv3joO59sau/TXw+Q==}
+  filenamify@7.0.2:
+    resolution: {integrity: sha512-fz10TUqSZ1lG7ftW1KnRotJzMD8YRb6kaAQKpZJBLvqXXfFgIEpuazy1w2lK3zhMiBSdH/uF9LFlv5smJ2Jl1w==}
     engines: {node: '>=20'}
 
   find-up-simple@1.0.1:
@@ -1802,7 +1804,7 @@ snapshots:
 
   filename-reserved-regex@4.0.0: {}
 
-  filenamify@7.0.1:
+  filenamify@7.0.2:
     dependencies:
       filename-reserved-regex: 4.0.0
 
