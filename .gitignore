@@ -7,3 +7,5 @@ coverage
 e2e-output
 e2e-mock-output
 .wps_claude
+temp
+package-lock.json

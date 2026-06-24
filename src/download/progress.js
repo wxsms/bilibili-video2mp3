@@ -1,19 +1,16 @@
-import Progress from 'multi-progress';
+import * as p from '@clack/prompts';
 
-let multi = null;
+let bar = null;
 
-function getMulti() {
-  if (!multi) {
-    multi = new Progress(process.stderr);
-  }
-  return multi;
+export function startProgress(total) {
+  bar = p.progress({ max: total, size: 30 });
+  bar.start();
 }
 
-export function createProgressBar(index, title, total) {
-  return getMulti().newBar(`${index} [:bar] :percent :etas :status ${title}`, {
-    complete: '=',
-    incomplete: ' ',
-    width: 30,
-    total: total,
-  });
+export function advanceProgress(msg) {
+  bar?.advance(1, msg);
+}
+
+export function stopProgress() {
+  bar?.stop();
 }
