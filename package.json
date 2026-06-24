@@ -21,7 +21,6 @@
   },
   "scripts": {
     "lint": "eslint . --fix",
-    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0",
     "test": "vitest run --exclude tests/e2e.test.js",
     "test:e2e": "vitest run tests/e2e.test.js",
     "test:e2e-mock": "vitest run tests/e2e-mock.test.js"
@@ -35,7 +34,6 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@vitest/coverage-v8": "4.1.9",
-    "conventional-changelog-cli": "5.0.0",
     "eslint": "10.5.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
