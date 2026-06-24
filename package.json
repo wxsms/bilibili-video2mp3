@@ -14,7 +14,7 @@
     "url": "https://github.com/wxsms/bilibili-video2mp3/issues"
   },
   "homepage": "https://github.com/wxsms/bilibili-video2mp3",
-  "packageManager": "pnpm@11.4.0",
+  "packageManager": "pnpm@11.6.0",
   "engines": {
     "node": ">=20.12.0",
     "pnpm": ">=11.0.0"
@@ -28,19 +28,19 @@
   },
   "dependencies": {
     "@clack/prompts": "1.4.0",
-    "axios": "1.16.1",
-    "commander": "14.0.3",
+    "axios": "1.17.0",
+    "commander": "15.0.0",
     "filenamify": "7.0.1"
   },
   "devDependencies": {
-    "@eslint/js": "8.57.1",
-    "@vitest/coverage-v8": "4.1.7",
+    "@eslint/js": "10.0.1",
+    "@vitest/coverage-v8": "4.1.8",
     "conventional-changelog-cli": "5.0.0",
-    "eslint": "10.4.0",
+    "eslint": "10.5.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "globals": "17.6.0",
-    "prettier": "3.8.3",
-    "vitest": "4.1.7"
+    "prettier": "3.8.4",
+    "vitest": "4.1.8"
   }
 }
