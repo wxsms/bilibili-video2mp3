@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: pnpm run lint
   test:
@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: pnpm test
   e2e-mock:
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: pnpm run test:e2e-mock
   audit:
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: pnpm audit --audit-level moderate
   build:
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: node src/index.js --help
   coverage:
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v6.0.3
       - uses: pnpm/action-setup@v6.0.8
         with:
-          version: 11.6.0
+          version: 11.9.0
       - run: pnpm install
       - run: pnpm test -- --coverage
       - uses: codecov/codecov-action@v7.0.0
