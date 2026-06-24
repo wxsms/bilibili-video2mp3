@@ -34,13 +34,13 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@vitest/coverage-v8": "4.1.8",
+    "@vitest/coverage-v8": "4.1.9",
     "conventional-changelog-cli": "5.0.0",
     "eslint": "10.5.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "globals": "17.6.0",
     "prettier": "3.8.4",
-    "vitest": "4.1.8"
+    "vitest": "4.1.9"
   }
 }
