@@ -26,7 +26,7 @@
     "test:e2e-mock": "vitest run tests/e2e-mock.test.js"
   },
   "dependencies": {
-    "@clack/prompts": "1.4.0",
+    "@clack/prompts": "1.6.0",
     "axios": "1.18.1",
     "commander": "15.0.0",
     "filenamify": "7.0.2"
