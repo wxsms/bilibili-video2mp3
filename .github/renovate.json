@@ -1,8 +1,8 @@
 {
   "extends": [
-    "config:recommended",
-    ":pinAllExceptPeerDependencies"
+    "config:recommended"
   ],
+  "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "matchUpdateTypes": [
